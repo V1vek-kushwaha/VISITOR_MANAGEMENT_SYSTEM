@@ -27,7 +27,7 @@ function App() {
 function Content() {
   const navigate = useNavigate();
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const [userType, setUserType] = useState('');
+  const [userType, setUserType] = useState("");
 
   useEffect(() => {
     const checkAuth = () => {
@@ -50,9 +50,9 @@ function Content() {
 
   const renderRoutes = () => {
     switch (userType) {
-      case 'Guard':
+      case "Guard":
         return <Route path="/" element={<Guard />} />;
-      case 'Receptionist':
+      case "Receptionist":
         return (
           <>
             <Route path="/" element={<Dashboard />} />
@@ -81,15 +81,13 @@ function Content() {
   return isAuthenticated ? (
     <div style={{ backgroundColor: "#f4f4f4" }}>
       <div className="flex h-screen">
-        {userType !== 'Guard' && <Sidebar />}
+        {userType !== "Guard" && <Sidebar />}
         <div className="flex-1 flex flex-col">
           <Topbar />
           <div className="overflow-auto">
-            <Routes>
-              {renderRoutes()}
-            </Routes>
+            <Routes>{renderRoutes()}</Routes>
           </div>
-          <Footer/>
+          <Footer />
         </div>
       </div>
     </div>
@@ -102,4 +100,3 @@ function Content() {
 }
 
 export default App;
-
