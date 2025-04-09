@@ -52,7 +52,7 @@ const SideBar = () => {
           )}
           <Icon
             icon="mdi:menu"
-            className="text-gray-600 cursor-pointer"
+            className="text-gray-600 cursor-pointer ms-4"
             height="24"
             onClick={toggleSidebar}
           />

@@ -60,14 +60,14 @@ const Topbar = () => {
     <>
       <div className="flex justify-between items-center bg-white/70 backdrop-blur-md p-2 shadow-lg mt-2 mx-2 rounded-3xl">
         {/* <img src={essilogo} alt="MOD Logo" className="h-12" /> */}
-        <div class="h-full flex items-center font-bold text-indigo-800 text-xl">
+        <div class="h-full flex items-center font-bold text-[#123458] text-xl">
           VISITOR MANAGEMENT SYSTEM
         </div>
 
         {localStorage.getItem("token") && (
           <div className="flex items-center space-x-2">
             <div
-              className="flex items-center space-x-2 bg-indigo-800 rounded-full p-1 transform scale-90 shadow-md min-w-[130px]"
+              className="flex items-center space-x-2 bg-[#123458] rounded-full p-1 transform scale-90 shadow-md min-w-[130px]"
               onClick={() => setProfileModalOpen(true)}
             >
               <div className="w-8 h-8 border-2 border-gray-300 rounded-full overflow-hidden bg-white flex justify-center items-center">
