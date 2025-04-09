@@ -5,7 +5,7 @@ import vmslogo from "../../assets/images/vms-logo.png";
 const Footer = () => {
   return (
     <div
-      className="p-4 fixed bottom-0 w-full bg-gray-100 flex justify-between"
+      className="px-4 fixed bottom-0 w-full bg-gray-100 flex justify-between"
       style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
     >
       <div className="footer-text flex items-center font-bold">

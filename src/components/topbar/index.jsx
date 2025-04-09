@@ -58,9 +58,9 @@ const Topbar = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-gray-100 p-4 shadow-md">
+      <div className="flex justify-between items-center bg-white/70 backdrop-blur-md p-2 shadow-lg mt-2 mx-2 rounded-3xl">
         {/* <img src={essilogo} alt="MOD Logo" className="h-12" /> */}
-        <div class="h-full flex items-center font-bold text-xl">
+        <div class="h-full flex items-center font-bold text">
           VISITOR MANAGEMENT SYSTEM
         </div>
 
