@@ -1,6 +1,6 @@
 ## Description
 
-Welcome to the Visitor Management System (VMS)! Our system is designed to simplify and enhance the visitor registration and management process for various environments, including offices, buildings, or events. With a user-friendly interface and role-based access control, VMS offers administrators, receptionists, and guards the tools they need to efficiently manage visitor traffic while ensuring security and compliance.
+Welcome to the Visitor Management System (VMS)! Our system is designed to simplify and enhance the visitor registration and management process for various environments, including offices, buildings, or events. With a user-friendly interface and role-based access control, VMS offers administrators, receptionists, and guards the tools they need to efficiently manage visitor traffic while ensuring security and compliance perpos.
 
 ## Features
 
