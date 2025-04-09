@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { url } from "../../utils/Constants";
 import { UserContext } from "../../context/UserContext.jsx";
 import Notification from "../../components/notification";
-import modlogo from "../../assets/images/web-logo.png";
+import modlogo from "../../assets/images/vms-logo.png";
 import footerwave from "../../assets/images/footer-wave.png";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Loading from "../../components/loading";
@@ -158,71 +158,62 @@ const Login = () => {
   }
 
   return (
-    <div className="flex items-center justify-center h-screen bg-customGreen w-full">
-      {/* <form className="p-8 min-w-[440px] border border-gray-300 rounded-lg shadow-md" onSubmit={handleSubmit} > */}
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-r from-[#0070F0] via-[#00B5F5] to-[#8CF0E4] overflow-hidden">
+      {/* Black overlay for better contrast */}
+      <div className="absolute inset-0 bg-black bg-opacity-10 z-0"></div>
+
       <form
-        className="p-8 min-w-[440px] rounded-lg"
-        style={{
-          border: "1px solid #567763",
-          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-        }}
+        className="relative z-10 w-full max-w-md rounded-2xl px-8 py-10 text-white border border-white/20 bg-white/10 backdrop-blur-md shadow-2xl"
         onSubmit={handleSubmit}
       >
-        <div className="flex justify-center mb-1">
-          <img src={modlogo} alt="Ministry of Defence" className="h-26" />
+        <div className="flex justify-center mb-6">
+          <img src={modlogo} alt="VMS Logo" className="h-20 drop-shadow-lg" />
         </div>
-        <div className="flex justify-center mb-1 text-white text-lg md:text-xl">
-          {/* Ministry Of Defence, India */}
-          Visitor Management System
+
+        <div className="text-center  font-bold tracking-wide">
+          Version 0.0.21
         </div>
-        <div className="flex justify-center mb-4 text-white text-lg md:text-xl">
-          {/* रक्षा मंत्रालय, भारत */}
-          विज़िटर प्रबंधन प्रणाली
-        </div>
-        <div className="mb-4">
-          <label htmlFor="username" className="sr-only">
-            Username
-          </label>
+        <div className="text-center text-lg font-medium text-white/80 mb-8"></div>
+
+        <div className="mb-5">
           <input
             type="text"
-            id="username"
-            className="w-full p-2 rounded-lg bg-customFieldGreen text-white"
+            className="w-full px-4 py-3 rounded-lg bg-white/20 placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-[#00D6ED]"
             placeholder="Username"
             value={username}
+            required
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+
         <div className="mb-6 relative">
-          <label htmlFor="password" className="sr-only">
-            Password
-          </label>
           <input
             type={showPassword ? "text" : "password"}
-            id="password"
-            className="w-full p-2 rounded-lg bg-customFieldGreen text-white pr-10"
-            value={password}
+            className="w-full px-4 py-3 rounded-lg bg-white/20 placeholder-white/70 text-white pr-10 focus:outline-none focus:ring-2 focus:ring-[#00D6ED]"
             placeholder="Password"
+            value={password}
+            required
             onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="button"
             onClick={handleTogglePasswordVisibility}
-            className="absolute inset-y-0 right-0 pr-3 flex text-white items-center text-sm leading-5"
+            className="absolute inset-y-0 right-0 pr-3 flex items-center text-white/80"
           >
             {showPassword ? <VisibilityOff /> : <Visibility />}
           </button>
         </div>
 
-        {/* <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg"> */}
         <button
           type="submit"
-          className="w-full text-white p-2 rounded-lg"
-          style={{ backgroundColor: "rgb(15 70 37)" }}
+          className="w-full bg-[#00B5F5] hover:bg-[#00A0E0] transition-colors duration-200 py-3 rounded-lg font-semibold tracking-wide shadow-md"
         >
           Login
         </button>
       </form>
-      <div className="absolute bottom-0 left-0 right-0">
+
+      {/* Bottom wave remains on top */}
+      <div className="absolute bottom-0 left-0 right-0 z-10">
         <img src={footerwave} alt="Wave" className="w-full" />
       </div>
     </div>

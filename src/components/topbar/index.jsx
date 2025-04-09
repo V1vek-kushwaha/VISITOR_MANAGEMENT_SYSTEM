@@ -11,30 +11,41 @@ const Topbar = () => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const { setIslogin, setUser, user, setDatas } = useContext(UserContext);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch(`${url}/accounts/logout-user/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          refresh: localStorage.getItem("refresh_token"),
-        }),
-      });
-      if (response.ok) {
-        localStorage.clear();
-        setUser();
-        history("/login");
-        Notification.showSuccessMessage(
-          "Logout Successfully!",
-          "You have been logged out successfully."
-        );
-      }
-    } catch (err) {
-      Notification.showErrorMessage("Error", "Server error!");
-    }
+  // const handleLogout = async () => {
+  //   try {
+  //     const response = await fetch(`${url}/accounts/logout-user/`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //       },
+  //       body: JSON.stringify({
+  //         refresh: localStorage.getItem("refresh_token"),
+  //       }),
+  //     });
+  //     if (response.ok) {
+  //       localStorage.clear();
+  //       setUser();
+  //       history("/login");
+  //       Notification.showSuccessMessage(
+  //         "Logout Successfully!",
+  //         "You have been logged out successfully."
+  //       );
+  //     }
+  //   } catch (err) {
+  //     Notification.showErrorMessage("Error", "Server error!");
+  //   }
+  // };
+  const handleLogout = () => {
+    localStorage.clear();
+    setUser();
+    setIslogin(false); // optionally set login status false
+
+    history("/login");
+    Notification.showSuccessMessage(
+      "Logout Successfully!",
+      "You have been logged out successfully."
+    );
   };
 
   let username = localStorage.getItem("user_name");
