@@ -82,7 +82,7 @@ const Visitors = ({
       <div className="flex justify-between items-center m-6">
         <div className="flex items-center space-x-2">
           <input
-            className="appearance-none border border-customGreen rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-700"
+            className="appearance-none border border-indigo-950 rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-indigo-950"
             type="text"
             name="first_name"
             value={searchParams.first_name}
@@ -98,7 +98,7 @@ const Visitors = ({
             placeholder="Search by last name"
           /> */}
           <input
-            className="appearance-none border border-customGreen rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-700"
+            className="appearance-none border border-indigo-950 rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:indigo-950"
             type="text"
             name="phone"
             value={searchParams.phone}
@@ -116,7 +116,7 @@ const Visitors = ({
           <select
             value={searchParams.limit}
             onChange={handleLimitChange}
-            className="border border-customGreen rounded-3xl bg-white py-2 px-3 text-gray-700 focus:outline-none"
+            className="border border-indigo-950 rounded-3xl bg-white py-2 px-3 text-gray-700 focus:outline-none"
           >
             {[5, 10, 20, 30, 50].map((size) => (
               <option key={size} value={size}>
@@ -127,7 +127,7 @@ const Visitors = ({
         </div>
         <div className="flex space-x-3">
           <button
-            className="flex items-center bg-customGreen hover:bg-green-700 text-white py-1 px-4 rounded-3xl"
+            className="flex items-center bg-indigo-900 text-white py-1 px-4 rounded-3xl"
             onClick={() => {
               onActionClick("addNewVisitor");
               handleClose();
@@ -186,14 +186,14 @@ const Visitors = ({
                 <tr key={visitor.id} className="hover:bg-grey-lighter">
                   <td className="py-1 px-1 border-b border-grey-light">
                     <div className="flex justify-center">
-                      <div className="inline-block h-16 w-16 border-2 border-gray-300 rounded-full overflow-hidden bg-customGreen">
+                      <div className="inline-block h-16 w-16 border-2 border-gray-300 rounded-full overflow-hidden bg-indigo-900">
                         {visitor.image ? (
                           <img
                             src={`data:image/jpeg;base64,${visitor.image}`}
                             alt="User"
                           />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-white bg-customGreen">
+                          <div className="h-full w-full flex items-center justify-center text-white bg-indigo-900">
                             {visitor.first_name
                               ? visitor.first_name.charAt(0).toUpperCase()
                               : "N"}
