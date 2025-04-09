@@ -21,9 +21,86 @@ const Login = () => {
     setShowPassword(!showPassword);
   };
 
+  // const handleSubmit = async (event) => {
+  //   event.preventDefault();
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await fetch(`${url}/accounts/login-user/`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         username: username,
+  //         password: password,
+  //       }),
+  //     });
+  //     const json = await response.json();
+
+  //     if (response.ok) {
+  //       Notification.showSuccessMessage("Welcome", "Logged in Successfully");
+
+  //       localStorage.setItem("user_id", json.id);
+  //       localStorage.setItem("user_name", json.username);
+  //       localStorage.setItem("user_type", json.user_type);
+  //       localStorage.setItem("image", json.image);
+  //       localStorage.setItem("token", json.token.access);
+  //       localStorage.setItem("refresh_token", json.token.refresh);
+  //       localStorage.setItem("userInfo", JSON.stringify(json));
+
+  //       setUser(json);
+  //       setUsername("");
+  //       setPassword("");
+  //       navigate("/");
+  //     } else {
+  //       setIsLoading(false);
+  //       Notification.showErrorMessage("Login Failed", json.error || "Invalid credentials");
+  //     }
+  //   } catch (err) {
+  //     setIsLoading(false);
+  //     Notification.showErrorMessage("Error", "Server error!");
+  //   }
+  // };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setIsLoading(true);
+
+    // If login is with fixed values
+    if (username === "admin" && password === "123456") {
+      const fakeUser = {
+        id: 1,
+        username: "admin",
+        user_type: "admin",
+        image: "", // You can provide a default avatar URL here
+        token: {
+          access: "fake_access_token_admin",
+          refresh: "fake_refresh_token_admin",
+        },
+      };
+
+      Notification.showSuccessMessage(
+        "Welcome",
+        "Logged in Successfully (Admin)"
+      );
+
+      localStorage.setItem("user_id", fakeUser.id);
+      localStorage.setItem("user_name", fakeUser.username);
+      localStorage.setItem("user_type", fakeUser.user_type);
+      localStorage.setItem("image", fakeUser.image);
+      localStorage.setItem("token", fakeUser.token.access);
+      localStorage.setItem("refresh_token", fakeUser.token.refresh);
+      localStorage.setItem("userInfo", JSON.stringify(fakeUser));
+
+      setUser(fakeUser);
+      setUsername("");
+      setPassword("");
+      setIsLoading(false);
+      navigate("/");
+      return;
+    }
+
+    // Default: actual API login for real users
     try {
       const response = await fetch(`${url}/accounts/login-user/`, {
         method: "POST",
@@ -35,6 +112,7 @@ const Login = () => {
           password: password,
         }),
       });
+
       const json = await response.json();
 
       if (response.ok) {
@@ -53,12 +131,15 @@ const Login = () => {
         setPassword("");
         navigate("/");
       } else {
-        setIsLoading(false);
-        Notification.showErrorMessage("Login Failed", json.error || "Invalid credentials");
+        Notification.showErrorMessage(
+          "Login Failed",
+          json.error || "Invalid credentials"
+        );
       }
     } catch (err) {
-      setIsLoading(false);
       Notification.showErrorMessage("Error", "Server error!");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -69,13 +150,24 @@ const Login = () => {
   });
 
   if (isLoading) {
-    return <div className="flex justify-center items-center h-screen"><Loading/></div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <Loading />
+      </div>
+    );
   }
 
   return (
     <div className="flex items-center justify-center h-screen bg-customGreen w-full">
       {/* <form className="p-8 min-w-[440px] border border-gray-300 rounded-lg shadow-md" onSubmit={handleSubmit} > */}
-      <form className="p-8 min-w-[440px] rounded-lg" style={{ 'border': "1px solid #567763", "boxShadow": "rgba(0, 0, 0, 0.24) 0px 3px 8px" }} onSubmit={handleSubmit} >
+      <form
+        className="p-8 min-w-[440px] rounded-lg"
+        style={{
+          border: "1px solid #567763",
+          boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
+        }}
+        onSubmit={handleSubmit}
+      >
         <div className="flex justify-center mb-1">
           <img src={modlogo} alt="Ministry of Defence" className="h-26" />
         </div>
@@ -88,7 +180,9 @@ const Login = () => {
           विज़िटर प्रबंधन प्रणाली
         </div>
         <div className="mb-4">
-          <label htmlFor="username" className="sr-only">Username</label>
+          <label htmlFor="username" className="sr-only">
+            Username
+          </label>
           <input
             type="text"
             id="username"
@@ -99,7 +193,9 @@ const Login = () => {
           />
         </div>
         <div className="mb-6 relative">
-          <label htmlFor="password" className="sr-only">Password</label>
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
           <input
             type={showPassword ? "text" : "password"}
             id="password"
@@ -118,7 +214,11 @@ const Login = () => {
         </div>
 
         {/* <button type="submit" className="w-full bg-purple-600 hover:bg-purple-700 text-white p-2 rounded-lg"> */}
-        <button type="submit" className="w-full text-white p-2 rounded-lg" style={{ backgroundColor: "rgb(15 70 37)" }}>
+        <button
+          type="submit"
+          className="w-full text-white p-2 rounded-lg"
+          style={{ backgroundColor: "rgb(15 70 37)" }}
+        >
           Login
         </button>
       </form>
@@ -130,6 +230,3 @@ const Login = () => {
 };
 
 export default Login;
-
-
-
