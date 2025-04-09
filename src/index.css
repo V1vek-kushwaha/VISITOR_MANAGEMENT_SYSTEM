@@ -45,3 +45,10 @@
         box-shadow: none;
     }
 }
+
+
+.bgImg{
+    background-image: url("../src/assets/images/background.jpg");
+   
+    
+}

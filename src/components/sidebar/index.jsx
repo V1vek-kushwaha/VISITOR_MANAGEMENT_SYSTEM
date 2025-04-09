@@ -68,7 +68,7 @@ const SideBar = () => {
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg font-medium text-sm relative transition-all duration-300
                   ${
                     isActive
-                      ? "bg-gradient-to-r from-blue-500 to-cyan-400 text-white shadow-md"
+                      ? "bg-gradient-to-r from-[#1c2546] via-[#b8dfff] to-[#c2e9fb] text-white shadow-md"
                       : "text-gray-600 hover:bg-gray-100 hover:text-blue-600"
                   }
                   ${isCollapsed ? "justify-center px-2" : ""}

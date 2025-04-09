@@ -215,7 +215,7 @@ const Dashboard = () => {
       {
         label: "Weekly Visitors",
         data: Object.values(weeklyVisitorData),
-        backgroundColor: "rgba(236, 72, 153, 0.5)",
+        backgroundColor: "rgba(59, 130, 246, 0.5)",
       },
     ],
   };
@@ -246,9 +246,9 @@ const Dashboard = () => {
       {
         data: Object.values(visitorInZonesData),
         backgroundColor: [
-          "rgba(139, 92, 246, 0.5)",
-          "rgba(59, 130, 246, 0.5)",
-          "rgba(168, 85, 247, 0.5)",
+          "rgba(255, 99, 132, 0.5)",
+          "rgba(53, 162, 235, 0.5)",
+          "rgba(75, 192, 192, 0.5)",
         ],
         hoverOffset: 4,
       },
@@ -276,7 +276,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="p-6">
+    <div className="p-6 bgImg">
       {/* Chart row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         {/* Weekly Visitors */}

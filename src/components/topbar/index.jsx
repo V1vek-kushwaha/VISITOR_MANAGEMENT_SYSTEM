@@ -58,19 +58,22 @@ const Topbar = () => {
 
   return (
     <>
-      <div className="flex justify-between items-center bg-white/70 backdrop-blur-md p-2 shadow-lg mt-2 mx-2 rounded-3xl">
+      <div
+        className="flex justify-between items-center  p-4 shadow-lg mt-2 mx-2 rounded-2xl backdrop-blur-xl bg-gradient-to-r from-white/30 via-white/20 to-[#a1c4fd]/40
+"
+      >
         {/* <img src={essilogo} alt="MOD Logo" className="h-12" /> */}
-        <div class="h-full flex items-center font-bold text-[#123458] text-xl">
+        <div class="h-full flex items-center font-bold text-xl">
           VISITOR MANAGEMENT SYSTEM
         </div>
 
         {localStorage.getItem("token") && (
           <div className="flex items-center space-x-2">
             <div
-              className="flex items-center space-x-2 bg-[#123458] rounded-full p-1 transform scale-90 shadow-md min-w-[130px]"
+              className="flex items-center space-x-2 bg-customGreen rounded-full p-1 transform scale-90 shadow-md min-w-[130px]"
               onClick={() => setProfileModalOpen(true)}
             >
-              <div className="w-8 h-8 border-2 border-gray-300 rounded-full overflow-hidden bg-white flex justify-center items-center">
+              <div className="w-8 h-8 border-2 border-gray-300 rounded-full overflow-hidden bg-customGreen flex justify-center items-center">
                 {userimage != "null" ? (
                   <img
                     src={`data:image/jpeg;base64,${localStorage.getItem(
@@ -80,7 +83,7 @@ const Topbar = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <span className="text-slate-800">
+                  <span className="text-white">
                     {username ? username.charAt(0).toUpperCase() : "N"}
                   </span>
                 )}
@@ -89,7 +92,7 @@ const Topbar = () => {
             </div>
 
             <button
-              className="bg-indigo-800 hover:bg-indigo-800 text-white py-2 px-4 rounded-3xl shadow-md flex items-center text-sm"
+              className="bg-customGreen hover:bg-green-700 text-white py-2 px-4 rounded-3xl shadow-md flex items-center text-sm"
               onClick={() => handleLogout()}
             >
               Logout
