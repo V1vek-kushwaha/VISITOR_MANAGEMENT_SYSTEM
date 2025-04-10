@@ -7,10 +7,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteIcon from "@mui/icons-material/Delete";
+// import MoreVertIcon from "@mui/icons-material/MoreVert";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
 import AddIcon from "@mui/icons-material/Add";
 import Alert from "../../components/alert/index.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -24,6 +26,7 @@ const Visitors = ({
   onActionClick,
   searchParams,
   setSearchParams,
+  // handleDelete,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [currentSelectedVisitor, setCurrentSelectedVisitor] = useState(null);
@@ -127,13 +130,13 @@ const Visitors = ({
         </div>
         <div className="flex space-x-3">
           <button
-            className="flex items-center bg-indigo-900 text-white py-1 px-4 rounded-3xl"
+            className="flex items-center bg-blue-900 text-white py-3 px-5 rounded-3xl"
             onClick={() => {
               onActionClick("addNewVisitor");
               handleClose();
             }}
           >
-            <AddIcon className="h-4 w-5 mr-2" />
+            <AddIcon className="h-4 w-5 mr-2 " />
             ADD NEW
           </button>
         </div>
@@ -186,14 +189,14 @@ const Visitors = ({
                 <tr key={visitor.id} className="hover:bg-grey-lighter">
                   <td className="py-1 px-1 border-b border-grey-light">
                     <div className="flex justify-center">
-                      <div className="inline-block h-16 w-16 border-2 border-gray-300 rounded-full overflow-hidden bg-indigo-900">
+                      <div className="inline-block h-12 w-12 border-2 border-gray-300 rounded-full overflow-hidden bg-blue-900">
                         {visitor.image ? (
                           <img
                             src={`data:image/jpeg;base64,${visitor.image}`}
                             alt="User"
                           />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-white bg-indigo-900">
+                          <div className="h-full w-full flex items-center justify-center text-white bg-blue-900">
                             {visitor.first_name
                               ? visitor.first_name.charAt(0).toUpperCase()
                               : "N"}
@@ -221,65 +224,66 @@ const Visitors = ({
                     {visitor.email}
                   </td>
                   <td className="py-4 px-6 border-b border-grey-light">
-                    <IconButton
-                      aria-label="more"
-                      aria-controls="long-menu"
-                      aria-haspopup="true"
-                      onClick={(event) => handleClick(event, visitor)}
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                    <Menu
-                      id="long-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                    >
-                      <MenuItem
-                        onClick={() => {
-                          onActionClick("view", currentSelectedVisitor);
-                          handleClose();
-                        }}
-                      >
-                        <ListItemIcon>
-                          <VisibilityIcon fontSize="small" />
+                    <div className="flex items-center space-x-1">
+                      {/* Status Icon */}
+                      <MenuItem disableGutters dense>
+                        <ListItemIcon className="min-w-0">
+                          {visitor.status === "active" ? (
+                            <CheckCircleIcon
+                              className="text-green-500"
+                              fontSize="small"
+                            />
+                          ) : (
+                            <ErrorIcon
+                              className="text-red-500"
+                              fontSize="large"
+                            />
+                          )}
                         </ListItemIcon>
-                        <ListItemText primary="View" />
                       </MenuItem>
+
+                      {/* View */}
                       <MenuItem
-                        onClick={() => {
-                          onActionClick("update", currentSelectedVisitor);
-                          handleClose();
-                        }}
+                        onClick={() => onActionClick("view", visitor)}
+                        disableGutters
+                        dense
                       >
-                        <ListItemIcon>
-                          <EditIcon fontSize="small" />
+                        <ListItemIcon className="min-w-0">
+                          <VisibilityIcon
+                            className="text-blue-700"
+                            fontSize="large"
+                          />
                         </ListItemIcon>
-                        <ListItemText primary="Update" />
                       </MenuItem>
+
+                      {/* Edit */}
                       <MenuItem
-                        onClick={() => {
-                          handleDelete(currentSelectedVisitor);
-                        }}
+                        onClick={() => onActionClick("update", visitor)}
+                        disableGutters
+                        dense
                       >
-                        <ListItemIcon>
-                          <DeleteIcon fontSize="small" />
+                        <ListItemIcon className="min-w-0">
+                          <EditIcon
+                            className="text-green-500"
+                            fontSize="large"
+                          />
                         </ListItemIcon>
-                        <ListItemText primary="Delete" />
                       </MenuItem>
+
+                      {/* Delete */}
                       <MenuItem
-                        onClick={() => {
-                          onActionClick("pass", currentSelectedVisitor);
-                          handleClose();
-                        }}
+                        onClick={() => handleDelete(visitor)}
+                        disableGutters
+                        dense
                       >
-                        <ListItemIcon>
-                          <CreditCardIcon fontSize="small" />
+                        <ListItemIcon className="min-w-0">
+                          <DeleteIcon
+                            className="text-red-500"
+                            fontSize="large"
+                          />
                         </ListItemIcon>
-                        <ListItemText primary="Generate Pass" />
                       </MenuItem>
-                    </Menu>
+                    </div>
                   </td>
                 </tr>
               ))}

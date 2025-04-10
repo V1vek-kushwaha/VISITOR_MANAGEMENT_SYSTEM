@@ -20,6 +20,7 @@ const navItemsReceptionist = [
   { name: "Passes", icon: "mdi:credit-card-outline", path: "/pass" },
   { name: "Reports", icon: "mdi:file-document-outline", path: "/report" },
   { name: "FAQ", icon: "mdi:comment-question-outline", path: "/faq" },
+  
 ];
 
 const SideBar = () => {

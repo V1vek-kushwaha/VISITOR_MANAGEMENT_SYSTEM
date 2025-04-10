@@ -35,6 +35,8 @@ const Passes = () => {
   //     }
   //     setIsLoading(false);
   // };
+
+  
   const fetchData = () => {
     setIsLoading(true);
     try {
@@ -65,6 +67,38 @@ const Passes = () => {
     if (!localStorage.getItem("token")) {
       navigate("/login");
     }
+    const dummyData = [
+      {
+        visitor: {
+          first_name: "Akash",
+          last_name: "Tiwari",
+          image: "", // base64 string or leave empty to show initials
+        },
+        visiting_purpose: "Meeting",
+        whom_to_visit: "Mr. Verma",
+        visiting_department: "HR",
+        created_on: new Date().toISOString(),
+        valid_until: new Date(Date.now() + 86400000).toISOString(), // +1 day
+      },
+      {
+        visitor: {
+          first_name: "Sneha",
+          last_name: "Roy",
+          image: "",
+        },
+        visiting_purpose: "Interview",
+        whom_to_visit: "Ms. Kapoor",
+        visiting_department: "IT",
+        created_on: new Date().toISOString(),
+        valid_until: new Date(Date.now() + 2 * 86400000).toISOString(),
+      },
+    ];
+  
+    // Only set dummy data if it hasn't already been set
+    if (!localStorage.getItem("visitorPasses")) {
+      localStorage.setItem("visitorPasses", JSON.stringify(dummyData));
+    }
+  
     fetchData();
   }, []);
 
@@ -73,12 +107,13 @@ const Passes = () => {
     setShowViewPass(true);
   };
 
+  
   return (
     <div style={{ marginBottom: "55px" }}>
       <div className="flex justify-between items-center m-6">
         <div>
           <input
-            className="appearance-none border border-customGreen rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-green-700"
+            className="appearance-none border border-blue-900 rounded-3xl w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 "
             type="text"
             placeholder="Search"
           />
@@ -133,14 +168,14 @@ const Passes = () => {
                 >
                   <td className="py-1 px-1 border-b border-grey-light">
                     <div className="flex justify-center">
-                      <div className="inline-block h-16 w-16 border-2 border-gray-300 rounded-full overflow-hidden bg-customGreen">
+                      <div className="inline-block h-16 w-16 border-2 border-gray-300 rounded-full overflow-hidden bg-blue-900">
                         {pass.visitor.image ? (
                           <img
                             src={`data:image/jpeg;base64,${pass.visitor.image}`}
                             alt="User"
                           />
                         ) : (
-                          <div className="h-full w-full flex items-center justify-center text-white bg-customGreen">
+                          <div className="h-full w-full flex items-center justify-center text-white bg-blue-900">
                             {pass.visitor.first_name
                               ? pass.visitor.first_name.charAt(0).toUpperCase()
                               : "N"}

@@ -215,7 +215,7 @@ const Dashboard = () => {
       {
         label: "Weekly Visitors",
         data: Object.values(weeklyVisitorData),
-        backgroundColor: "rgba(59, 130, 246, 0.5)",
+        backgroundColor: "rgba(30, 58, 138, 0.5)",
       },
     ],
   };
@@ -246,9 +246,9 @@ const Dashboard = () => {
       {
         data: Object.values(visitorInZonesData),
         backgroundColor: [
-          "rgba(255, 99, 132, 0.5)",
-          "rgba(53, 162, 235, 0.5)",
-          "rgba(75, 192, 192, 0.5)",
+          "rgba(255, 105, 180, 0.5)",
+          "rgba(0, 123, 255, 0.5)",
+          "rgba(199, 21, 133, 0.5)",
         ],
         hoverOffset: 4,
       },
@@ -363,7 +363,7 @@ const Dashboard = () => {
                                 alt="User"
                               />
                             ) : (
-                              <div className="h-full w-full flex items-center justify-center text-white bg-customGreen">
+                              <div className="h-full w-full flex items-center justify-center text-white bg-blue-900">
                                 {visitor.visitor_name
                                   ? visitor.visitor_name.charAt(0).toUpperCase()
                                   : "N"}

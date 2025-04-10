@@ -425,7 +425,7 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
                 )}
               </div>
               <button
-                className="flex items-center bg-customGreen hover:bg-green-700 text-white py-1 px-4 rounded-3xl"
+                className="flex items-center bg-blue-900  text-white py-1 px-4 rounded-3xl"
                 onClick={() => setSignatureModalOpen(true)}
               >
                 Capture Signature
