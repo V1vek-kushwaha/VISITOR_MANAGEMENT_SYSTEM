@@ -341,16 +341,45 @@ const CreateNewPass = ({ open, onClose, visitor }) => {
                   : "border-gray-300"
               }`}
             >
-              <option value="">Select Department</option>
-              <option value="Air Force">Air Force</option>
-              <option value="Army">Army</option>
-              <option value="CPWD">CPWD</option>
-              <option value="Defence">Defence</option>
-              <option value="DGQA">DGQA</option>
-              <option value="IFA (Army-Q )">IFA (Army-Q )</option>
-              <option value="MOD">MOD</option>
-              <option value="MTNL">MTNL</option>
-              <option value="Navy">Navy</option>
+              <div>
+                <option value>Select Department</option>
+                {/* Existing Departments */}
+                <option value="Air Force">Air Force</option>
+                <option value="Army">Army</option>
+                <option value="CPWD">CPWD</option>
+                <option value="Defence">Defence</option>
+                <option value="DGQA">DGQA</option>
+                <option value="IFA (Army-Q )">IFA (Army-Q )</option>
+                <option value="MOD">MOD</option>
+                <option value="MTNL">MTNL</option>
+                <option value="Navy">Navy</option>
+                {/* Additional Departments */}
+                <option value="Reception">Reception</option>
+                <option value="Human Resources (HR)">
+                  Human Resources (HR)
+                </option>
+                <option value="Administration">Administration</option>
+                <option value="Finance">Finance</option>
+                <option value="Procurement">Procurement</option>
+                <option value="IT Department">IT Department</option>
+                <option value="Marketing">Marketing</option>
+                <option value="Sales">Sales</option>
+                <option value="Operations">Operations</option>
+                <option value="Legal & Compliance">
+                  Legal &amp; Compliance
+                </option>
+                <option value="Facilities Management">
+                  Facilities Management
+                </option>
+                <option value="Customer Service">Customer Service</option>
+                <option value="Management / Executive Office">
+                  Management / Executive Office
+                </option>
+                <option value="Engineering / Technical">
+                  Engineering / Technical
+                </option>
+                <option value="Security Department">Security Department</option>
+              </div>
             </select>
             {errors.visiting_department && (
               <div className="text-red-500 text-xs">
