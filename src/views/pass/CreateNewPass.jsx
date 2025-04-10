@@ -19,9 +19,13 @@ const CreateNewPass = ({ open, onClose, visitor }) => {
     visiting_purpose: "",
     key: "",
     whom_to_visit: "",
+    first_name: visitor.first_name,
+    last_name: visitor.last_name,
     visiting_department: "",
-    zones_allowed: [],
+    zones_allowed: ["Zone-A"],
   };
+
+  // console.log("see all vistior", visitor);
 
   const steps = ["Visitor Details", "Meeting Details", "Zone Access"];
   const [passData, setPassData] = useState(initialValues);
@@ -46,7 +50,7 @@ const CreateNewPass = ({ open, onClose, visitor }) => {
     }));
   }, [visitor]);
 
-  console.log("create pass data data", passData);
+  // console.log("create pass data data", passData);
 
   const fetchKeyList = async () => {
     // try {
@@ -200,6 +204,8 @@ const CreateNewPass = ({ open, onClose, visitor }) => {
     // }
     // Simulate delay and success
     setTimeout(() => {
+      console.log("new visitore", passData);
+
       const dummyCreatedPass = {
         id: new Date().getTime(),
         ...passData,
