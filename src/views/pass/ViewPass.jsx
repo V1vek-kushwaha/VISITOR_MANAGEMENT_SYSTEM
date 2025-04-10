@@ -4,11 +4,25 @@ import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import PrintIcon from "@mui/icons-material/Print";
 import passlogo from "../../assets/images/passlogo.png";
+import { QRCode } from "qrcode.react";
+import { QRCodeSVG } from "qrcode.react";
 
 const ViewPass = ({ open, onClose, passData }) => {
   const handlePrint = () => {
     window.print();
   };
+
+  console.log("pass data ifor ", passData);
+
+  const qrData = JSON.stringify({
+    passId: passData.id,
+    visitor: passData.visitor,
+    validUntil: passData.valid_until,
+    visiting_department: passData.visiting_department,
+
+    visiting_purpose: passData.visiting_purpose,
+    zone_names: passData.zone_names,
+  });
 
   return (
     <Dialog
@@ -35,7 +49,10 @@ const ViewPass = ({ open, onClose, passData }) => {
           <div className="col-span-1 p-2 border-r-2 border-gray-300">
             <div className="flex flex-col items-center space-y-4 pb-2">
               <img src={passlogo} alt="Pass Logo" className="h-16 w-32" />
-              {passData?.visitor.image ? (
+              <div>
+                <QRCodeSVG value={qrData} size={128} />
+              </div>
+              {/* {passData?.visitor.image ? (
                 <img
                   src={`data:image/jpeg;base64,${passData?.visitor.image}`}
                   alt="User"
@@ -47,7 +64,7 @@ const ViewPass = ({ open, onClose, passData }) => {
                     ? passData?.visitor.first_name.charAt(0)
                     : "N/A"}
                 </div>
-              )}
+              )} */}
             </div>
           </div>
           <div className="col-span-2 flex flex-col space-y-4">

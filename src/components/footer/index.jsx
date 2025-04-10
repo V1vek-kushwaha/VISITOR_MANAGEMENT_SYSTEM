@@ -9,7 +9,7 @@ const Footer = () => {
       style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
     >
       <div className="footer-text flex items-center font-bold">
-        Maintained by Neutonsoft
+        Developed with <span className="text-red-500 mt-1 mx-2">❤︎</span>
       </div>
       <div
         className="footer-text flex items-center"

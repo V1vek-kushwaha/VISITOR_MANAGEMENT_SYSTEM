@@ -46,6 +46,8 @@ const CreateNewPass = ({ open, onClose, visitor }) => {
     }));
   }, [visitor]);
 
+  console.log("create pass data data", passData);
+
   const fetchKeyList = async () => {
     // try {
     //     const response = await fetch(`${url}/key/key-info`, {
