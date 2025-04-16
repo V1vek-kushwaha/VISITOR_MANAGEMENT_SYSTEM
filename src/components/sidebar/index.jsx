@@ -12,6 +12,8 @@ const navItemsAdmin = [
   { name: "Reports", icon: "mdi:file-document-outline", path: "/report" },
   { name: "FAQ", icon: "mdi:comment-question-outline", path: "/faq" },
   { name: "Configure", icon: "mdi:cog-outline", path: "/configure" },
+  { name: "Employee", icon: "mdi:cog-outline", path: "/Employee" },
+  
 ];
 
 const navItemsReceptionist = [
@@ -20,6 +22,9 @@ const navItemsReceptionist = [
   { name: "Passes", icon: "mdi:credit-card-outline", path: "/pass" },
   { name: "Reports", icon: "mdi:file-document-outline", path: "/report" },
   { name: "FAQ", icon: "mdi:comment-question-outline", path: "/faq" },
+  { name: "Configure", icon: "mdi:cog-outline", path: "/configure" },
+  { name: "Employee", icon: "mdi:account-box-multiple", path: "/employee" },
+  { name: "Users", icon: "mdi:account-box-multiple", path: "/user" },
   
 ];
 
@@ -46,7 +51,7 @@ const SideBar = () => {
         isCollapsed ? "w-16" : "w-64"
       } shadow-sm`}
     >
-      <div className="flex flex-col h-full  py-4 relative">
+      <div className="relative flex flex-col h-full py-4">
         <div className="flex items-center justify-between mb-6">
           {!isCollapsed && (
             <img src={vmslogo} alt="VMS Logo" className="h-10 ml-2" />
@@ -76,7 +81,7 @@ const SideBar = () => {
                 `}
               >
                 {isActive && (
-                  <span className="absolute left-0 top-0 h-full w-1 bg-cyan-400 rounded-tr rounded-br" />
+                  <span className="absolute top-0 left-0 w-1 h-full rounded-tr rounded-br bg-cyan-400" />
                 )}
                 <Icon icon={item.icon} className="text-[20px]" />
                 {!isCollapsed && <span>{item.name}</span>}
@@ -85,7 +90,7 @@ const SideBar = () => {
           })}
         </nav>
 
-        <div className="absolute bottom-4 left-0 w-full flex justify-center">
+        <div className="absolute left-0 flex justify-center w-full bottom-4">
           {!isCollapsed && (
             <p className="text-[11px] text-gray-400 font-medium tracking-wide">
               © 2025 Visitor Management

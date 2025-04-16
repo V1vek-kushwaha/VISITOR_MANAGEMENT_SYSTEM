@@ -26,8 +26,10 @@ const SignatureCapture = ({ onCapture }) => {
         try {
           var awaitConfirmSignature =
             await STPadServerLibDefault.confirmSignature();
-          const countedPoints = awaitConfirmSignature.countedPoints;
 
+          // inside handleConfirmSignature
+
+          const countedPoints = awaitConfirmSignature.countedPoints;
           const valueforSignature = countedPoints / sampleRate;
           var params = new STPadServerLibDefault.Params.getSignatureImage();
           params.setFileType(STPadServerLibDefault.FileType.PNG);
@@ -38,12 +40,15 @@ const SignatureCapture = ({ onCapture }) => {
           setMessage(base64);
           setModalOpen(false);
 
+          // FIX: define params4 locally if not already accessible
+          var params4 = new STPadServerLibDefault.Params.closePad(0);
           await STPadServerLibDefault.closePad(params4);
           await STPadServerLibCommons.destroyConnection();
+
         } catch (error) {
           if (
-            (error.errorMessage =
-              "The function could not be executed because no signature capture process was started.")
+            error.errorMessage ===
+            "The function could not be executed because no signature capture process was started."
           ) {
             Notification.showErrorMessage("Info", "Please draw a signature");
             return await STPadServerLibDefault.retrySignature();
@@ -165,9 +170,9 @@ const SignatureCapture = ({ onCapture }) => {
     }
   };
 
-  const handleButtonClickRetake = () => {
+  const handleButtonClickRetake = async () => {
     setMessage("");
-    const result = fetchData();
+    const result = await fetchData();  // Added await
     if (result === "No Pad Found") {
       setModalOpen(false);
     } else {
