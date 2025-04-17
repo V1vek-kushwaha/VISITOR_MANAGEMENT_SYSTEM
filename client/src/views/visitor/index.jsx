@@ -51,7 +51,7 @@ const Visitor = () => {
     limit: 10,
   });
 
-  console.log("selected vister", selectedVisitor);
+  // console.log("selected vister", selectedVisitor);
 
   // const fetchData = async () => {
   //   setIsLoading(true);

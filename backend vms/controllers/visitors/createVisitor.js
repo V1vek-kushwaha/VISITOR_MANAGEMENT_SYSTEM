@@ -13,6 +13,9 @@ exports.addVisitor = async (req, res) => {
         message: "User not found" ,
       });
     }
+    if (!user.email || typeof user.email !== "string") {
+      return res.status(400).json({ message: "Email already use" });
+    }
 
     const newVisitor = await Visitor.create({
       full_name: req.body.full_name,

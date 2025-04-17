@@ -39,22 +39,40 @@ const Profile = ({ open, onClose }) => {
       handleClose();
     }
   };
+  const loginUserInfo = JSON.parse(localStorage.getItem("loginUserInfo"));
+  console.log(loginUserInfo);
+
 
   useEffect(() => {
     // set dummy data
 
+    // localStorage.setItem(
+    //   "userInfo",
+    //   JSON.stringify({
+    //     first_name: "Rohan",
+    //     last_name: "Singh",
+    //     user_type: "Technician",
+    //     address: "123 MG Road, Bengaluru, India",
+    //     phone: "+91 9852481102",
+    //     email: "rohansingh@example.com",
+    //     employee_code: "TECH1023",
+    //     blood_group: "B+",
+    //     is_active: true,
+    //     is_staff: true,
+    //     image: "", // Keep it empty to show first letter fallback
+    //   })
     localStorage.setItem(
       "userInfo",
       JSON.stringify({
-        first_name: "Rohan",
-        last_name: "Singh",
-        user_type: "Technician",
+        first_name: loginUserInfo?.user?.name || "Rohan",
+        last_name: "" || "Singh",
+        user_type: loginUserInfo?.user?.role || 'Technician',
         address: "123 MG Road, Bengaluru, India",
-        phone: "+91 9852481102",
-        email: "rohansingh@example.com",
+        phone: loginUserInfo?.user?.phone || '67687363675',
+        email: loginUserInfo?.user?.email || 'rohansingh@gmail.com',
         employee_code: "TECH1023",
         blood_group: "B+",
-        is_active: true,
+        is_active: loginUserInfo?.user?.isActive,
         is_staff: true,
         image: "", // Keep it empty to show first letter fallback
       })
