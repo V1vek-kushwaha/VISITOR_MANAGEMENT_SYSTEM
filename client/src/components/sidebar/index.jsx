@@ -13,6 +13,7 @@ const navItemsAdmin = [
   { name: "FAQ", icon: "mdi:comment-question-outline", path: "/faq" },
   { name: "Configure", icon: "mdi:cog-outline", path: "/configure" },
   { name: "Employee", icon: "mdi:cog-outline", path: "/Employee" },
+  { name: "Attendance", icon: "mdi:account-box-multiple", path: "/attendance" },
   
 ];
 
@@ -25,6 +26,7 @@ const navItemsReceptionist = [
   { name: "Configure", icon: "mdi:cog-outline", path: "/configure" },
   { name: "Employee", icon: "mdi:account-box-multiple", path: "/employee" },
   { name: "Users", icon: "mdi:account-box-multiple", path: "/user" },
+  { name: "Attendance", icon: "mdi:account-box-multiple", path: "/attendance" },
   
 ];
 

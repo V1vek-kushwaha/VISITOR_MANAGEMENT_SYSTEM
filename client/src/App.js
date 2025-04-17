@@ -8,6 +8,7 @@ import Footer from "./components/footer";
 import Login from "./views/auth/Login";
 import Dashboard from "./views/dashboard/Dashboard";
 import Employee from "./views/employee/Employee";
+import Attendance from "./views/attendance/Attendance";
 import Users from "./views/user";
 import Visitor from "./views/visitor";
 import Passes from "./views/pass/Passes";
@@ -61,6 +62,7 @@ function Content() {
             <Route path="/pass" element={<Passes />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/Employee" element={<employee/>} />
+            <Route path="/Attendance" element={<attendance/>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         );
@@ -68,13 +70,14 @@ function Content() {
         return (
           <>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/user" element={<Users />} />
+            <Route path="/user" element={<Users/>} />
             <Route path="/visitor" element={<Visitor />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/pass" element={<Passes />} />
             <Route path="/report" element={<Report />} />
             <Route path="/configure" element={<Configure />} />
             <Route path="/employee" element={<Employee/>} />
+            <Route path="/attendance" element={<Attendance/>} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         );
