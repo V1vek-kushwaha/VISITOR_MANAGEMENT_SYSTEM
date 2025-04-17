@@ -4,6 +4,7 @@ import Notification from "../../components/notification";
 import { url } from "../../utils/Constants";
 import CameraModal from "../../components/camera";
 import SignatureCapture from "../../components/SignatureCapture/SignatureCapture";
+import { postAPI } from "../../utils/api";
 
 const steps = [
   "Personal Details",
@@ -76,6 +77,8 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
         if (!visitorData.gov_id_no.trim())
           newErrors.gov_id_no = "Government ID number is required";
         break;
+      default: 
+
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -103,31 +106,62 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
     setErrors({ ...errors, [name]: null });
   };
 
+  console.log('visitorsDta', visitorData);
+
   const handleSave = async () => {
     if (!validate()) return;
+    // const data = {
+    //   "full_name": "muku Doe",
+    //   "mobile_number": "0501234567",
+    //   "email": "muku@example.com",
+    //   "emirates_id_number": "784-1234-5678900-1",
+    //   "emirates_id_expiry": "2026-12-31",
+    //   "nationality": "American",
+    //   "photo_url": "http://example.com/photo.jpg",
+    //   "id_document_url": "http://example.com/id.jpg",
+    //   "blacklist_reason": "",
+    //   "is_blacklisted": false,
+    //   "emergency_contact_name": "Jane Doe",
+    //   "emergency_contact_number": "0509876543",
+    //   "visitor_type": "Contractor",
+    //   "government_id_type": "Passport",
+    //   "government_id_number": "A1234567"
+    // }
+    
     try {
+      // Include captured data
       visitorData.image = imageData;
       visitorData.signature = signatureData;
-      const response = await fetch(`${url}/visitor/visitor-info`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify(visitorData),
-      });
-      const json = await response.json();
-      if (response.ok) {
-        Notification.showSuccessMessage(
-          "Success",
-          "Visitor Added Successfully"
-        );
+  
+      // Build request payload with defaults where needed
+      const data = {
+        
+        full_name: `${visitorData.first_name || "First"} ${visitorData.last_name || "Last"}`,
+        mobile_number: visitorData.phone || "0000000000",
+        email: visitorData.email || "",
+        emirates_id_number: visitorData.gov_id_no || "",
+        emirates_id_expiry: "2026-12-31", // static for now, update as needed
+        nationality: "Indian", // or fetch from a select
+        photo_url: visitorData.image ? `data:image/jpeg;base64,${visitorData.image}` : "",
+        id_document_url: "", // You can map a document field if added later
+        blacklist_reason: "",
+        is_blacklisted: false,
+        emergency_contact_name: "N/A", // default or editable field
+        emergency_contact_number: "N/A", // default or editable field
+        visitor_type: visitorData.visitor_type || "General",
+        government_id_type: visitorData.gov_id_type || "Other",
+        government_id_number: visitorData.gov_id_no || "",
+        signature: visitorData.signature ? `data:image/png;base64,${visitorData.signature}` : "",
+      };
+  
+      const json = await postAPI(`http://localhost:5000/api/visitor/visitors-create`, data);
+  
+      if (json) {
+        Notification.showSuccessMessage("Success", "Visitor Added Successfully");
         onActionClick("view", json);
-        // setVisitorCreated(json);
         handleClose();
         fetchData();
       } else {
-        const json = await response.json();
         Notification.showErrorMessage("Error", json.error);
       }
     } catch (error) {
