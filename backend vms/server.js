@@ -1,15 +1,19 @@
 const cors = require('cors');
 const express = require("express");
 const app = express();
-const sequelize = require("./models");
+const cors = require("cors");
+const db = require("./models"); // ✅ use 'db' not 'sequelize'
 const dotenv = require("dotenv");
+const morgan = require("morgan")
 dotenv.config();
 
-//define port
 const port = process.env.port || 5000;
 
-sequelize
-  .sync()
+// Sync Sequelize
+db.sequelize
+  .sync({
+    alter: true,
+  })
   .then(() => {
     console.log("Synced db.");
   })
@@ -25,37 +29,24 @@ app.use(
   })
 );
 
-// CORS setup
+// CORS
 app.use(
   cors({
-    origin: "*", // Allow requests from any origin (for testing purposes)
+    origin: "*",
     credentials: true,
   })
 );
 
-app.get("/", (req, res) => {
-  res.json({
-    version: "1.0.0",
-    api: "VMS API Services",
-    health: "Running ✅",
-  });
-});
+// middleware
+app.use(morgan("dev"))
 
-app.listen(port, async () => {
-  try {
-    // if(process.env.)
-    // get secretsString:
-    // const secretsString = await retrieveSecrets();
-    // console.log("env are:", secretsString);
-    // //write to .env file at root level of project:
-    // await fs.writeFile(".env", secretsString);
 
-    dotenv.config();
 
-    console.log(`Example app listening at http://localhost:${port}`);
-  } catch (error) {
-    //log the error and crash the app
-    console.log("Error in setting environment variables", error);
-    process.exit(-1);
-  }
+// Routes
+const authRoutes = require("./routers");
+app.use("/api", authRoutes);  // Now your endpoints are: /api/auth/register, /api/auth/login
+
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
 });

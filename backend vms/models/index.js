@@ -1,19 +1,10 @@
 const dbConfig = require("../config/Database/db.config");
-console.log("db config:", dbConfig);
-
 const Sequelize = require("sequelize");
-// const { applyAssociations } = require("./applyAssociations");
+
 const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
-  //   port: 14193, //actual server port
   dialect: dbConfig.dialect,
   operatorsAliases: false,
-  dialectOptions: {
-    // ssl: {
-    //   require : false,
-    //   rejectUnauthorized: false, // <<<<<<< YOU NEED THIS
-    // },
-  },
   pool: {
     max: dbConfig.pool.max,
     min: dbConfig.pool.min,
@@ -22,25 +13,39 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   },
 });
 
-// const modelDefiners = [
-//   ...require("./user"),
-//   ...require("./property"),
-//   ...require("./alc"),
-//   ...require("./leads"),
-//   ...require("./payment"),
-//   ...require("./brodcast"),
-//   ...require("./reports"),
-//   ...require("./cms"),
+const db = {};
 
-//   // Add more models here...
-//   // require('./models/item'),
-// ];
-// We define all models according to their files.
-// for (const modelDefiner of modelDefiners) {
-//   modelDefiner(sequelize);
-// }
+db.Sequelize = Sequelize;
+db.sequelize = sequelize;
 
-// We execute any extra setup after the models are defined, such as adding associations.
-// applyAssociations(sequelize);
+// ✅ Register Models
+db.User = require("./user.model")(sequelize, Sequelize);
+db.Visitor = require("./visitor.model")(sequelize, Sequelize);
 
-module.exports = sequelize;
+
+// for role API
+db.Role = require("./role.model")(sequelize, Sequelize);
+// Define association (optional but useful)
+db.Role.hasMany(db.User, { foreignKey: "role_id" });
+db.User.belongsTo(db.Role, { foreignKey: "role_id" });
+
+
+// For deparment 
+db.Department = require("./department.model")(sequelize, Sequelize);
+// Associate if needed
+db.Department.hasMany(db.User, { foreignKey: "department_id" });
+db.User.belongsTo(db.Department, { foreignKey: "department_id" });
+
+db.VisitorsType = require("./visitors_type.model")(sequelize, Sequelize);
+
+
+// nfc_cards )
+db.nfc_cards = require("./nfc_cards.model")(sequelize, Sequelize.DataTypes);
+
+
+
+
+
+
+
+module.exports = db;
