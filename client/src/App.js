@@ -1,11 +1,13 @@
-import React, { useContext, useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { UserContext, UserContextProvider } from "./context/UserContext";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { UserContextProvider } from "./context/UserContext";
+
 import Topbar from "./components/topbar";
 import Sidebar from "./components/sidebar";
 import Footer from "./components/footer";
+
 import Login from "./views/auth/Login";
+import SignUp from "./views/auth/SignUp";
 import Dashboard from "./views/dashboard/Dashboard";
 import Employee from "./views/employee/Employee";
 import Attendance from "./views/attendance/Attendance";
@@ -16,6 +18,7 @@ import Configure from "./views/configure";
 import Guard from "./views/guard";
 import Faq from "./views/auth/Faq";
 import Report from "./views/report";
+
 function App() {
   return (
     <BrowserRouter>
@@ -28,15 +31,16 @@ function App() {
 
 function Content() {
   const navigate = useNavigate();
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState("");
 
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem("token");
       const type = localStorage.getItem("user_type");
+
       setIsAuthenticated(!!token);
-      setUserType(type);
+      setUserType(type || "");
 
       if (!token) {
         navigate("/login");
@@ -54,6 +58,7 @@ function Content() {
     switch (userType) {
       case "Guard":
         return <Route path="/" element={<Guard />} />;
+
       case "Receptionist":
         return (
           <>
@@ -61,8 +66,8 @@ function Content() {
             <Route path="/visitor" element={<Visitor />} />
             <Route path="/pass" element={<Passes />} />
             <Route path="/faq" element={<Faq />} />
-            <Route path="/Employee" element={<employee/>} />
-            <Route path="/Attendance" element={<attendance/>} />
+            <Route path="/employee" element={<Employee />} />
+            <Route path="/attendance" element={<Attendance />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         );
@@ -70,14 +75,14 @@ function Content() {
         return (
           <>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/user" element={<Users/>} />
+            <Route path="/user" element={<Users />} />
             <Route path="/visitor" element={<Visitor />} />
             <Route path="/faq" element={<Faq />} />
             <Route path="/pass" element={<Passes />} />
             <Route path="/report" element={<Report />} />
             <Route path="/configure" element={<Configure />} />
-            <Route path="/employee" element={<Employee/>} />
-            <Route path="/attendance" element={<Attendance/>} />
+            <Route path="/employee" element={<Employee />} />
+            <Route path="/attendance" element={<Attendance />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         );
@@ -85,21 +90,20 @@ function Content() {
   };
 
   return isAuthenticated ? (
-    <div>
-      <div className="flex h-screen">
-        {userType !== "Guard" && <Sidebar />}
-        <div className="flex-1 flex flex-col">
-          <Topbar />
-          <div className="overflow-auto">
-            <Routes>{renderRoutes()}</Routes>
-          </div>
-          <Footer />
+    <div className="flex h-screen">
+      {userType !== "Guard" && <Sidebar />}
+      <div className="flex-1 flex flex-col">
+        <Topbar />
+        <div className="overflow-auto">
+          <Routes>{renderRoutes()}</Routes>
         </div>
+        <Footer />
       </div>
     </div>
   ) : (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<SignUp />} />
       <Route path="*" element={<Navigate to="/login" replace />} />
     </Routes>
   );

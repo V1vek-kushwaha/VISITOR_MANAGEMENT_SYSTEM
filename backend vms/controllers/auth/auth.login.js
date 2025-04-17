@@ -16,15 +16,14 @@ exports.login = async (req, res) => {
     });
     
     
-
     const validPass = await bcrypt.compare(password, user.password_hash);
     if (!validPass) {
       return res.status(401).json({ message: "Invalid password" });
     }
     
-    if (!user.is_verified) {
-      return res.status(401).json({ message: "Please verify your email first." });
-    }
+    // if (!user.is_verified) {
+    //   return res.status(401).json({ message: "Please verify your email first." });
+    // }
     
     const userRole = user.role?.name || "unknown";
     // const userDepartment =
@@ -44,11 +43,15 @@ exports.login = async (req, res) => {
       : "Logged in successfully!";
     
     res.status(200).json({
+      success: true,
+      status: '200',
       token,
       user: {
         name: user.full_name,
         email: user.email,
         role: userRole,
+        phone: user.mobile_number,
+        isActive: user.is_active
       },
       message: roleMessage,
     });

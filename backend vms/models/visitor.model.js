@@ -43,6 +43,17 @@ module.exports = (sequelize, DataTypes) => {
     emergency_contact_number: {
       type: DataTypes.STRING(20),
     },
+
+    // 🔽 New fields added
+    visitor_type: {
+      type: DataTypes.STRING(50),
+    },
+    government_id_type: {
+      type: DataTypes.STRING(50),
+    },
+    government_id_number: {
+      type: DataTypes.STRING(50),
+    },
   });
 
   return Visitor;
