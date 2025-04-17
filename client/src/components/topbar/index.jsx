@@ -12,7 +12,7 @@ const Topbar = () => {
   const { setIslogin, setUser, user, setDatas } = useContext(UserContext);
   const [language, setLanguage] = useState("English");
   const [langDropdown, setLangDropdown] = useState(false);
-  
+
   // const handleLogout = async () => {
   //   try {
   //     const response = await fetch(`${url}/accounts/logout-user/`, {
@@ -65,84 +65,45 @@ const Topbar = () => {
 "
       >
         {/* <img src={essilogo} alt="MOD Logo" className="h-12" />  */}
-        {/* <div class="h-full flex items-center text-blue-900 font-bold text-xl">
+        <div class="h-full flex items-center text-blue-900 font-bold text-xl">
           VISITOR MANAGEMENT SYSTEM
-        </div> */}
+        </div>
 
-{localStorage.getItem("token") && (
-  <div className="flex pl-80 space-x-2">
-    {/* Checkout Button */}
-    <button
-      className="flex items-center bg-[#edf0f9] text-blue-900 font-medium py-2 px-4 rounded-2xl shadow-sm text-sm hover:opacity-90"
-      onClick={() => alert('Checkout clicked!')}
-    >
-      <span className="mr-1">↩</span> Checkout
-    </button>
+        {localStorage.getItem("token") && (
+          <div className="flex pl-80 space-x-2">
 
-    {/* Clock In Button */}
-    <button
-      className="flex items-center bg-[#edf0f9] text-blue-900 font-medium py-2 px-4 rounded-2xl shadow-sm text-sm hover:opacity-90"
-      onClick={() => alert('Clock In clicked!')}
-    >
-      <span className="mr-1">＋</span> Clock In
-    </button>
+            {/* Profile Section */}
+            <div
+              className="flex items-center space-x-2 cursor-pointer"
+              onClick={() => setProfileModalOpen(true)}
+            >
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-blue-900 flex justify-center items-center">
+                {userimage !== "null" ? (
+                  <img
+                    src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+                    alt="Profile"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-white text-lg">
+                    {username ? username.charAt(0).toUpperCase() : "N"}
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col leading-tight">
+                <span className="text-gray-500 text-sm">Admin</span>
+                <span className="text-black font-semibold">Hi, {username || "John Doe"}</span>
+              </div>
+            </div>
 
-    {/* Language Selector */}
-    <div className="relative">
-  <div
-    onClick={() => setLangDropdown(!langDropdown)}
-    className="flex items-center bg-[#edf0f9] text-blue-900 font-medium py-2 px-4 rounded-2xl shadow-sm text-sm cursor-pointer hover:opacity-90"
-  >
-    <span className="mr-1">🇬🇧</span> {language}
-  </div>
-
-  {langDropdown && (
-    <div className="absolute right-0 mt-2 w-32 bg-white border rounded-md shadow-lg z-50">
-      <div
-        onClick={() => { setLanguage("English"); setLangDropdown(false); }}
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-      >
-        🇬🇧 English
-      </div>
-      <div
-        onClick={() => { setLanguage("Arabic"); setLangDropdown(false); }}
-        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-      >
-        🇸🇦 Arabic
-      </div>
-    </div>
-  )}
-</div>
-
-    {/* Profile Section */}
-    <div
-      className="flex items-center space-x-2 bg-blue-900 rounded-full p-1 transform scale-90 shadow-md min-w-[130px]"
-      onClick={() => setProfileModalOpen(true)}
-    >
-      <div className="w-8 h-8 border-2 border-gray-300 rounded-full overflow-hidden bg-blue-900 flex justify-center items-center">
-        {userimage != "null" ? (
-          <img
-            src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="image"
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <span className="text-white">
-            {username ? username.charAt(0).toUpperCase() : "N"}
-          </span>
+          <button
+              className="bg-blue-900 hover:blue-900 text-white py-2 px-4 rounded-3xl shadow-md flex items-center text-sm"
+              onClick={() => handleLogout()}
+            >
+              Logout
+            </button>
+          </div>
         )}
-      </div>
-      <span className="text-white p-1">{username}</span>
-    </div>
-
-    <button
-      className="bg-blue-900 hover:blue-900 text-white py-2 px-4 rounded-3xl shadow-md flex items-center text-sm"
-      onClick={() => handleLogout()}
-    >
-      Logout
-    </button>
-  </div>
-)}
 
       </div>
 
