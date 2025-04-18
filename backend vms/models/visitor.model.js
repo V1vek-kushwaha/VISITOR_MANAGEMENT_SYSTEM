@@ -56,5 +56,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  
+  // Set initial auto_increment to 10000
+  Visitor.afterSync(async () => {
+    await sequelize.query("ALTER TABLE roles AUTO_INCREMENT = 200400;");
+  });
+
   return Visitor;
 };

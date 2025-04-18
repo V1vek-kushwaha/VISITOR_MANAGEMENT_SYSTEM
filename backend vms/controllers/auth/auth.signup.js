@@ -96,8 +96,9 @@ exports.signup = async (req, res) => {
     });
     
 
-    res.status(201).json({ message: "Registered! Please verify your email." });
+    res.status(201).json({ message: "Registered Successfully!" });
   } catch (err) {
+    console.log("errors",err)
     res.status(500).json({ error: err.message });
   }
 };

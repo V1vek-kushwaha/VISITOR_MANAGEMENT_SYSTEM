@@ -1,7 +1,6 @@
 const express = require("express");
 const cors = require("cors");
 // ...some code...
-const cors = require("cors");  // <--- Duplicate declaration
 const app = express();
 
 const db = require("./models"); // ✅ use 'db' not 'sequelize'
