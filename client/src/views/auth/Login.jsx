@@ -32,6 +32,7 @@ const Login = () => {
   };
   const handleSignup = () => {
     setIsSignUp(!isSignUp);
+    // navigate('/signup')
   };
 
   const handleSubmit = async (event) => {
