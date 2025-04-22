@@ -31,6 +31,7 @@ export const postAPI = async (url, body) => {
   }
 };
 
+
 export const putAPI = async (url, body) => {
   try {
     const res = await fetch(url, {

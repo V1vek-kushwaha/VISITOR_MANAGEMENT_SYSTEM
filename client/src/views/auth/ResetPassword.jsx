@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog, DialogTitle } from '@mui/material';
 import Notification from "../../components/notification";
-import { url } from "../../utils/Constants";
 
 const ResetPassword = ({ open, onClose }) => {
   const navigate = useNavigate();
@@ -43,7 +42,7 @@ const ResetPassword = ({ open, onClose }) => {
     if (!validate()) return;
 
     try {
-      const response = await fetch(`${url}/accounts/reset-password-by-user/`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/auth/reset-password`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -53,10 +52,10 @@ const ResetPassword = ({ open, onClose }) => {
       });
 
       if (response.ok) {
-        Notification.showSuccessMessage('Success', 'Password Updated Successfully');       
+        Notification.showSuccessMessage('Success', 'Password Updated Successfully');
       } else {
         const json = await response.json();
-        Notification.showErrorMessage('Try Again!', json.error);
+        Notification.showErrorMessage('Try Again!', json.error || 'Something went wrong.');
       }
     } catch (error) {
       Notification.showErrorMessage('Error', 'Server error!');

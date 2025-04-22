@@ -109,7 +109,7 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
 
   const handleSave = async () => {
     if (!validate()) return;
-
+  
     const fieldsToSend = [
       "first_name",
       "last_name",
@@ -123,20 +123,20 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
       "gov_id_no",
       "gov_id_type",
     ];
-
-    // Construct the payload by filtering out only the necessary fields
+  
     const payload = Object.keys(visitorData)
       .filter((key) => fieldsToSend.includes(key))
       .reduce((obj, key) => {
         obj[key] = visitorData[key];
         return obj;
       }, {});
-
+  
     try {
       payload.image = imageData;
       payload.signature = signatureData;
+  
       const response = await fetch(
-        `${url}/visitor/visitor-info/${visitorData.id}`,
+        `${process.env.REACT_APP_API_URL}/visitor/visitors-update/${visitorData.id}`,
         {
           method: "PATCH",
           headers: {
@@ -146,12 +146,9 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
           body: JSON.stringify(payload),
         }
       );
-
+  
       if (response.ok) {
-        Notification.showSuccessMessage(
-          "Success",
-          "Visitor Updated Successfully"
-        );
+        Notification.showSuccessMessage("Success", "Visitor Updated Successfully");
         handleClose();
         fetchData();
       } else {
@@ -162,6 +159,7 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
       Notification.showErrorMessage("Error", "Server error");
     }
   };
+  
 
   const handleImageCapture = (base64Image) => {
     setImageData(base64Image);

@@ -16,11 +16,12 @@ import Alert from "../../components/alert/index.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import Pagination from "../../components/pagination/index.jsx";
+import { fetchVisitors} from "../../utils/visitorService.js";
 
 const Visitors = ({
-  visitors,
-  totalVisitors,
-  isLoading,
+  // visitors,
+  // totalVisitors,
+  // isLoading,
   onActionClick,
   searchParams,
   setSearchParams,
@@ -31,6 +32,9 @@ const Visitors = ({
 
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [visitors, setVisitors] = useState([]);
+  const [totalVisitors, setTotalVisitors] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleClick = (event, visitor) => {
     setAnchorEl(event.currentTarget);
@@ -75,7 +79,32 @@ const Visitors = ({
     handlePageChange((currentPage - 1) * itemsPerPage);
   }, [currentPage]);
 
+  useEffect(() => {
+    const loadVisitors = async () => {
+      setIsLoading(true);
+      const params = { ...searchParams, limit: itemsPerPage, offset: (currentPage - 1) * itemsPerPage };
+      const data = await fetchVisitors(params);
+      setVisitors(data.results);
+      setTotalVisitors(data.count);
+      setIsLoading(false);
+    };
+
+    loadVisitors();
+  }, [searchParams, currentPage, itemsPerPage]);
+
   const totalPages = Math.ceil(totalVisitors / itemsPerPage);
+
+  
+
+  const handleAddNewVisitor = async () => {
+    const newVisitor = {
+      name: "John Doe",
+      email: "john@example.com",
+      phone: "1234567890"
+    };
+
+  
+  };
 
   return (
     <div style={{ marginBottom: "55px" }}>
@@ -127,11 +156,8 @@ const Visitors = ({
         </div>
         <div className="flex space-x-3">
           <button
-            className="flex items-center px-4 py-1 text-white bg-blue-900  rounded-3xl"
-            onClick={() => {
-              onActionClick("addNewVisitor");
-              handleClose();
-            }}
+            className="flex items-center px-4 py-1 text-white bg-blue-900 rounded-3xl"
+            onClick={handleAddNewVisitor}
           >
             <AddIcon className="w-5 mr-2 h-7" />
             ADD NEW
@@ -152,120 +178,120 @@ const Visitors = ({
         </Box>
       ) : visitors?.length > 0 ? (
         <div className="p-2 bg-white rounded shadow-md overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr className="bg-gray-100 text-slate-950">
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Image</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Name</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Type</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Phone</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID No</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Email</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {visitors?.map((visitor) => (
-              <tr key={visitor.id} className="hover:bg-gray-50">
-                <td className="px-2 py-2 border-b">
-                  <div className="flex justify-center">
-                    <div className="inline-block w-16 h-16 overflow-hidden border-2 border-gray-300 rounded-full bg-blue-900">
-                      {visitor.image ? (
-                        <img
-                          src={`data:image/jpeg;base64,${visitor.image}`}
-                          alt="User"
-                          className="object-cover w-full h-full"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
-                          {visitor.first_name ? visitor.first_name.charAt(0).toUpperCase() : "N"}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 border-b">{visitor.first_name} {visitor.last_name}</td>
-                <td className="px-6 py-4 border-b">{visitor.visitor_type}</td>
-                <td className="px-6 py-4 border-b">{visitor.phone}</td>
-                <td className="px-6 py-4 border-b">{visitor.gov_id_type.replace("_", " ")}</td>
-                <td className="px-6 py-4 border-b">{visitor.gov_id_no}</td>
-                <td className="px-6 py-4 border-b">{visitor.email}</td>
-                <td className="px-6 py-4 border-b">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={(event) => handleClick(event, visitor)}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        onActionClick("view", currentSelectedVisitor);
-                        handleClose();
-                      }}
-                    >
-                      <ListItemIcon>
-                        <VisibilityIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="View" />
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        onActionClick("update", currentSelectedVisitor);
-                        handleClose();
-                      }}
-                    >
-                      <ListItemIcon>
-                        <EditIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Update" />
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        handleDelete(currentSelectedVisitor);
-                      }}
-                    >
-                      <ListItemIcon>
-                        <DeleteIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Delete" />
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        onActionClick("pass", currentSelectedVisitor);
-                        handleClose();
-                      }}
-                    >
-                      <ListItemIcon>
-                        <CreditCardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Generate Pass" />
-                    </MenuItem>
-                  </Menu>
-                </td>
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="bg-gray-100 text-slate-950">
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Image</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Name</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Type</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Phone</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID No</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Email</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      
-        <div className="flex justify-center mt-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            paginate={setCurrentPage}
-          />
+            </thead>
+            <tbody>
+              {visitors?.map((visitor) => (
+                <tr key={visitor.id} className="hover:bg-gray-50">
+                  <td className="px-2 py-2 border-b">
+                    <div className="flex justify-center">
+                      <div className="inline-block w-16 h-16 overflow-hidden border-2 border-gray-300 rounded-full bg-blue-900">
+                        {visitor.image ? (
+                          <img
+                            src={`data:image/jpeg;base64,${visitor.image}`}
+                            alt="User"
+                            className="object-cover w-full h-full"
+                          />
+                        ) : (
+                          <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
+                            {visitor.first_name ? visitor.first_name.charAt(0).toUpperCase() : "N"}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 border-b">{visitor.first_name} {visitor.last_name}</td>
+                  <td className="px-6 py-4 border-b">{visitor.visitor_type}</td>
+                  <td className="px-6 py-4 border-b">{visitor.phone}</td>
+                  <td className="px-6 py-4 border-b">{visitor.gov_id_type.replace("_", " ")}</td>
+                  <td className="px-6 py-4 border-b">{visitor.gov_id_no}</td>
+                  <td className="px-6 py-4 border-b">{visitor.email}</td>
+                  <td className="px-6 py-4 border-b">
+                    <IconButton
+                      aria-label="more"
+                      aria-controls="long-menu"
+                      aria-haspopup="true"
+                      onClick={(event) => handleClick(event, visitor)}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      id="long-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          onActionClick("view", currentSelectedVisitor);
+                          handleClose();
+                        }}
+                      >
+                        <ListItemIcon>
+                          <VisibilityIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="View" />
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          onActionClick("update", currentSelectedVisitor);
+                          handleClose();
+                        }}
+                      >
+                        <ListItemIcon>
+                          <EditIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Update" />
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleDelete(currentSelectedVisitor);
+                        }}
+                      >
+                        <ListItemIcon>
+                          <DeleteIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Delete" />
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          onActionClick("pass", currentSelectedVisitor);
+                          handleClose();
+                        }}
+                      >
+                        <ListItemIcon>
+                          <CreditCardIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Generate Pass" />
+                      </MenuItem>
+                    </Menu>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="flex justify-center mt-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              paginate={setCurrentPage}
+            />
+          </div>
         </div>
-      </div>
-      
+
       ) : (
         <Box
           sx={{
