@@ -7,6 +7,7 @@ const visitorRole = require("./roles");
 const visitorDeparment = require("./departments");
 const visitorsType = require("./visitors_type.routes");
 const nfc_cards= require("./nfcCards.routes");
+const visites= require("./visitRoutes");
 
 // Combine routes with a base path
 router.use("/auth", authRoutes);
@@ -15,6 +16,6 @@ router.use("/role", visitorRole);
 router.use("/department", visitorDeparment);
 router.use("/visitorstype", visitorsType);
 router.use("/nfccard", nfc_cards);
-
+router.use("/visits", visites);
 
 module.exports = router;

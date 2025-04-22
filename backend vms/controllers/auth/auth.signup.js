@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
     // Default role_id if not provided
     const roleId = await userRole.findOne({
       where: {
-        name: "employee",
+        name: "admin",
       },
     }).then((data) => {
       console.log(data);
@@ -100,5 +100,83 @@ exports.signup = async (req, res) => {
   } catch (err) {
     console.log("errors",err)
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    res.status(200).json({ success: true, data: users });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+
+exports.getUserById = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json({ success: true, data: user });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+exports.deleteUser = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    await user.destroy();
+    res.status(200).json({ success: true, message: "User deleted" });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+};
+
+
+exports.updateUser = async (req, res) => {
+  const { id } = req.params;
+  const {
+    full_name,
+    email,
+    password,
+    mobile_number,
+    profile_photo_url
+  } = req.body;
+
+  try {
+    const user = await User.findByPk(id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const updatedFields = {};
+
+    if (full_name !== undefined) updatedFields.full_name = full_name;
+    if (email !== undefined) updatedFields.email = email;
+    if (mobile_number !== undefined) updatedFields.mobile_number = mobile_number;
+    if (profile_photo_url !== undefined) updatedFields.profile_photo_url = profile_photo_url;
+
+    if (password !== undefined) {
+      const salt = await bcrypt.genSalt(10);
+      updatedFields.password_hash = await bcrypt.hash(password, salt);
+    }
+
+    await user.update(updatedFields);
+
+    res.status(200).json({
+      success: true,
+      message: "User updated",
+      data: user
+    });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
   }
 };

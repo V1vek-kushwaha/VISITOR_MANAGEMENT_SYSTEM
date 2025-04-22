@@ -42,6 +42,7 @@ db.VisitorsType = require("./visitors_type.model")(sequelize, Sequelize);
 
 // nfc_cards )
 db.nfc_cards = require("./nfc_cards.model")(sequelize, Sequelize.DataTypes);
+db.Visit = require("./visites.model")(sequelize, Sequelize.DataTypes);
 
 
 

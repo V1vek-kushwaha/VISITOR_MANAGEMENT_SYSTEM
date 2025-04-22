@@ -43,18 +43,29 @@ exports.getRoleById = async (req, res) => {
 // Update Role
 exports.updateRole = async (req, res) => {
   const { id } = req.params;
-  const { name } = req.body;
+  const { name, is_deleted } = req.body;
 
   try {
     const role = await Role.findOne({ where: { id, is_deleted: false } });
     if (!role) return res.status(404).json({ message: "Role not found" });
 
-    await role.update({ name });
-    res.status(200).json({ success: true, message: "Role updated", data: role });
+    // Prepare update object
+    const updateData = {};
+    if (name !== undefined) updateData.name = name;
+    if (is_deleted !== undefined) updateData.is_deleted = is_deleted;
+
+    await role.update(updateData);
+
+    res.status(200).json({
+      success: true,
+      message: "Role updated successfully",
+      data: role,
+    });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+
 
 // Soft Delete Role
 exports.deleteRole = async (req, res) => {

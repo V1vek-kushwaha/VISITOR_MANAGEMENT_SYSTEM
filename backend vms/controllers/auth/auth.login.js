@@ -15,7 +15,6 @@ exports.login = async (req, res) => {
       include: [{ model: Role, as: "role", attributes: ['name'] }]
     });
     
-    
     const validPass = await bcrypt.compare(password, user.password_hash);
     if (!validPass) {
       return res.status(401).json({ message: "Invalid password" });
