@@ -283,7 +283,7 @@ const Login = () => {
             </button>
 
             <div className="mt-6 text-center font-medium text-gray-600">
-              For Demo Login, Click Below{" "}
+               Click Here For{" "}
               <span
                 onClick={handleSignup}
                 className="text-blue-600 font-medium hover:underline cursor-pointer"
@@ -293,26 +293,7 @@ const Login = () => {
             </div>
 
 
-            <div className="mt-4 flex justify-center gap-4">
-              <button
-                onClick={() => handleDemoLogin("admin")}
-                className="px-4 py-2 bg-blue-400 text-white rounded-full font-semibold text-sm hover:bg-blue-500"
-              >
-                Admin
-              </button>
-              <button
-                onClick={() => handleDemoLogin("Guard")}
-                className="px-4 py-2 bg-orange-400 text-white rounded-full font-semibold text-sm hover:bg-orange-500"
-              >
-                Employee
-              </button>
-              <button
-                onClick={() => handleDemoLogin("Receptionist")}
-                className="px-4 py-2 bg-purple-400 text-white rounded-full font-semibold text-sm hover:bg-purple-500"
-              >
-                Reception
-              </button>
-            </div>
+           
           </div>
         )}
 

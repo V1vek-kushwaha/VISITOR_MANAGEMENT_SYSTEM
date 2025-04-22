@@ -49,9 +49,9 @@ const Index = () => {
         />
       </div>
 
-      <div className="overflow-x-auto bg-white shadow-lg rounded-lg">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-100">
+      <div className="my-6 bg-gray-400 rounded shadow-md ">
+        <table className=" my-6 bg-white rounded shadow-md">
+          <thead className="w-full text-left border-collapse">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Name</th>
               <th className="px-6 py-3 text-left text-xs font-semibold text-gray-700 uppercase">Email</th>
