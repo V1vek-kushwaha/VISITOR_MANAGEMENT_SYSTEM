@@ -14,27 +14,7 @@ const Passes = () => {
 
   let navigate = useNavigate();
 
-  // const fetchData = async () => {
-  //     setIsLoading(true);
-  //     try {
-  //         const response = await fetch(`${url}/passes/visitor-pass-info`, {
-  //             method: "GET",
-  //             headers: {
-  //                 "Content-Type": "application/json",
-  //                 Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //             },
-  //         });
-  //         const json = await response.json();
-  //         if (response.ok) {
-  //             setPassesData(json);
-  //         } else {
-  //             Notification.showErrorMessage("Try Again!", json.error);
-  //         }
-  //     } catch (err) {
-  //         Notification.showErrorMessage("Error", "Server error!");
-  //     }
-  //     setIsLoading(false);
-  // };
+  
 
   
   const fetchData = () => {
