@@ -50,17 +50,17 @@ const Login = () => {
 
         const json = await postAPI("http://localhost:5000/api/auth/login", data);
 
-        if (json.user.role === "employee") {
+        if (json.user.role === "admin") {
           Notification.showSuccessMessage("Welcome", "Logged in Successfully");
-
+        
           localStorage.setItem("user_id", json.id || '1');
           localStorage.setItem("user_name", json.user.name);
-          localStorage.setItem("user_type", 'Guard');
+          localStorage.setItem("user_type", 'Admin');
           localStorage.setItem("image", json.image || '/jjhvgvh');
           localStorage.setItem("token", json.token);
           localStorage.setItem("refresh_token", json.token);
           localStorage.setItem("loginUserInfo", JSON.stringify(json));
-
+        
           setUser(json);
           setUsername("");
           setPassword("");
@@ -69,9 +69,10 @@ const Login = () => {
         } else {
           Notification.showErrorMessage(
             "Access Denied",
-            "Login allowed only for employees"
+            "Login allowed only for admins"
           );
         }
+        
       } catch (err) {
         console.error("Error during login:", err.message);
         Notification.showErrorMessage("Login Failed", "Invalid credentials or server error.");
@@ -156,7 +157,7 @@ const Login = () => {
 
         Notification.showSuccessMessage(
           "Welcome",
-          "Logged in Successfully (Employee)"
+          "Logged in Successfully"
         );
 
         localStorage.setItem("user_id", fakeUser.id);
