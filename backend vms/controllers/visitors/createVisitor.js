@@ -4,42 +4,52 @@ const User = db.User;
 
 exports.addVisitor = async (req, res) => {
   try {
-    // req.user is coming from token middleware
     const user = await User.findByPk(req.user.id);
 
     if (!user) {
-      return res.status(404).json({ 
+      return res.status(404).json({
         success: false,
-        message: "User not found" ,
+        message: "User not found",
       });
     }
-    if (!user.email || typeof user.email !== "string") {
-      return res.status(400).json({ message: "Email already use" });
+
+    // Validate required files
+    if (!req.files || !req.files['profile_image'] || !req.files['signature_image']) {
+      return res.status(400).json({ success: false, message: "Profile and signature images are required" });
     }
+
+    // Build base URL (e.g., http://localhost:5000)
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+
+    const profileImageFilename = req.files['profile_image'][0]?.filename;
+    const signatureImageFilename = req.files['signature_image'][0]?.filename;
+
 
     const newVisitor = await Visitor.create({
       full_name: req.body.full_name,
       mobile_number: req.body.mobile_number,
       email: req.body.email,
-      emirates_id_number: req.body.emirates_id_number,
-      emirates_id_expiry: req.body.emirates_id_expiry,
-      nationality: req.body.nationality,
-      photo_url: req.body.photo_url,
-      id_document_url: req.body.id_document_url,
-      blacklist_reason: req.body.blacklist_reason || "",
-      is_blacklisted: req.body.is_blacklisted || false,
-      emergency_contact_name: req.body.emergency_contact_name,
-      emergency_contact_number: req.body.emergency_contact_number,
-      created_at: new Date()
+      address: req.body.address,
+      profile_image: `${baseUrl}/uploads/${profileImageFilename}`,
+      signature_image: `${baseUrl}/uploads/${signatureImageFilename}`,
+      visitor_type: req.body.visitor_type,
+      government_id_type: req.body.government_id_type,
+      government_id_number: req.body.government_id_number,
+      created_at: new Date(),
+      created_by: user.id
     });
 
-    res.status(201).json({ 
+    // Return JSON with full image URLs
+    res.status(201).json({
       success: true,
-      message: "Visitor added successfully", 
-      visitor: newVisitor 
+      message: "Visitor added successfully",
+      visitor: {
+        ...newVisitor.toJSON()
+      }
     });
 
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error("Error adding visitor:", err);
+    res.status(500).json({ success: false, error: err.message });
   }
 };

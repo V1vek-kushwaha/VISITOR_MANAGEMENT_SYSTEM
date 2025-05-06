@@ -37,7 +37,7 @@ exports.signup = async (req, res) => {
     // Default role_id if not provided
     const roleId = await userRole.findOne({
       where: {
-        name: "admin",
+        name: "employee",
       },
     }).then((data) => {
       console.log(data);
