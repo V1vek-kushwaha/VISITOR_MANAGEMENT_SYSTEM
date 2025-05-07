@@ -17,6 +17,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import Pagination from "../../components/pagination/index.jsx";
 import axios from "axios";
+import Notification from "../../components/notification/index.jsx";
 
 const Visitors = ({
   totalVisitors,
@@ -56,12 +57,12 @@ const Visitors = ({
 
       }
     };
-  
+
     fetchVisitors();
   }, []);
 
-  console.log("hiii",visitors)
-  
+  // console.log("hiii", visitors)
+
   const handleClick = (event, visitors) => {
     setAnchorEl(event.currentTarget);
     setCurrentSelectedVisitor(visitors);
@@ -77,11 +78,31 @@ const Visitors = ({
     handleClose();
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     console.log("Deleting...", currentSelectedVisitor);
-    setShowDeleteAlert(false);
-    // Perform delete logic here
+    try {
+      const token = localStorage.getItem("token");
+  
+      const response = await axios.delete(
+        `${process.env.REACT_APP_API_URL}/visitor/visitors-delete/${currentSelectedVisitor.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+  
+      console.log("API Response:", response);
+      Notification.showSuccessMessage(
+        response.message,
+        'Visitor Deleted successfully!'
+      );
+      setShowDeleteAlert(false);
+    } catch (error) {
+      console.error("Error deleting visitor:", error);
+    }
   };
+  
 
   const handleSearchChange = (event) => {
     const { name, value } = event.target;
@@ -111,7 +132,7 @@ const Visitors = ({
   }, [visitors]);
 
 
-  
+
 
   return (
     <div style={{ marginBottom: "55px" }}>
@@ -188,121 +209,121 @@ const Visitors = ({
         </Box>
       ) : visitors?.length > 0 ? (
         <div className="p-2 bg-white rounded shadow-md overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead>
-            <tr className="bg-gray-100 text-slate-950">
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Image</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Name</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Type</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Phone</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID No</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Email</th>
-              <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-          {visitors?.map((visitors) => (
-              <tr key={visitors.id} className="hover:bg-gray-50">
-                <td className="px-2 py-2 border-b">
-                  <div className="flex justify-center">
-                    <div className="inline-block w-16 h-16 overflow-hidden border-2 border-gray-300 rounded-full bg-blue-900">
-                      {visitors.image ? (
-                        <img
-                        src={`data:image/jpeg;base64,${visitors.photo_url}`}
-                        alt="User"
-                        className="object-cover w-40 h-40 rounded-full"
-                      />
-                      
-                      ) : (
-                        <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
-                          {visitors.first_name ? visitors.first_name.charAt(0).toUpperCase() : "N"}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 border-b">{visitors.full_name}</td>
-                <td className="px-6 py-4 border-b">{visitors.visitor_type}</td>
-                <td className="px-6 py-4 border-b">{visitors.mobile_number}</td>
-                <td className="px-6 py-4 border-b">{visitors.government_id_type?.replace("_", " ")}</td>
-                <td className="px-6 py-4 border-b">{visitors.government_id_number}</td>
-                <td className="px-6 py-4 border-b">{visitors.email}</td>
-                <td className="px-6 py-4 border-b">
-                  <IconButton
-                    aria-label="more"
-                    aria-controls="long-menu"
-                    aria-haspopup="true"
-                    onClick={(event) => handleClick(event, visitors)}
-                  >
-                    <MoreVertIcon />
-                  </IconButton>
-                  <Menu
-                    id="long-menu"
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                  >
-                    <MenuItem
-                      onClick={() => {
-                        onActionClick("view", currentSelectedVisitor);
-                        handleClose();
-                      }}
-                    >
-                      <ListItemIcon>
-                        <VisibilityIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="View" />
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        onActionClick("update", currentSelectedVisitor);
-                        handleClose();
-                      }}
-                    >
-                      <ListItemIcon>
-                        <EditIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Update" />
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        handleDelete(currentSelectedVisitor);
-                      }}
-                    >
-                      <ListItemIcon>
-                        <DeleteIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Delete" />
-                    </MenuItem>
-                    <MenuItem
-                      onClick={() => {
-                        onActionClick("pass", currentSelectedVisitor);
-                        handleClose();
-                      }}
-                    >
-                      <ListItemIcon>
-                        <CreditCardIcon fontSize="small" />
-                      </ListItemIcon>
-                      <ListItemText primary="Generate Pass" />
-                    </MenuItem>
-                  </Menu>
-                </td>
+          <table className="min-w-full table-auto">
+            <thead>
+              <tr className="bg-gray-100 text-slate-950">
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Image</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Name</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Type</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Phone</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Gov ID No</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Email</th>
+                <th className="px-6 py-4 text-xs font-bold uppercase border-b bg-grey-lightest text-grey-dark border-grey-light">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      
-        <div className="flex justify-center mt-4">
-          <Pagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            paginate={setCurrentPage}
-          />
+            </thead>
+            <tbody>
+              {visitors?.map((visitors) => (
+                <tr key={visitors.id} className="hover:bg-gray-50">
+                  <td className="px-2 py-2 border-b">
+                    <div className="flex justify-center">
+                      <div className="inline-block w-16 h-16 overflow-hidden border-2 border-gray-300 rounded-full bg-blue-900">
+                        {visitors.image ? (
+                          <img
+                            src={`data:image/jpeg;base64,${visitors.photo_url}`}
+                            alt="User"
+                            className="object-cover w-40 h-40 rounded-full"
+                          />
+
+                        ) : (
+                          <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
+                            {visitors.first_name ? visitors.first_name.charAt(0).toUpperCase() : "N"}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 border-b">{visitors.full_name}</td>
+                  <td className="px-6 py-4 border-b">{visitors.visitor_type}</td>
+                  <td className="px-6 py-4 border-b">{visitors.mobile_number}</td>
+                  <td className="px-6 py-4 border-b">{visitors.government_id_type?.replace("_", " ")}</td>
+                  <td className="px-6 py-4 border-b">{visitors.government_id_number}</td>
+                  <td className="px-6 py-4 border-b">{visitors.email}</td>
+                  <td className="px-6 py-4 border-b">
+                    <IconButton
+                      aria-label="more"
+                      aria-controls="long-menu"
+                      aria-haspopup="true"
+                      onClick={(event) => handleClick(event, visitors)}
+                    >
+                      <MoreVertIcon />
+                    </IconButton>
+                    <Menu
+                      id="long-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem
+                        onClick={() => {
+                          onActionClick("view", currentSelectedVisitor);
+                          handleClose();
+                        }}
+                      >
+                        <ListItemIcon>
+                          <VisibilityIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="View" />
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          onActionClick("update", currentSelectedVisitor);
+                          handleClose();
+                        }}
+                      >
+                        <ListItemIcon>
+                          <EditIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Update" />
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          handleDelete(currentSelectedVisitor);
+                        }}
+                      >
+                        <ListItemIcon>
+                          <DeleteIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Delete" />
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          onActionClick("pass", currentSelectedVisitor);
+                          handleClose();
+                        }}
+                      >
+                        <ListItemIcon>
+                          <CreditCardIcon fontSize="small" />
+                        </ListItemIcon>
+                        <ListItemText primary="Generate Pass" />
+                      </MenuItem>
+                    </Menu>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div className="flex justify-center mt-4">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              paginate={setCurrentPage}
+            />
+          </div>
         </div>
-      </div>
-      
+
       ) : (
         <Box
           sx={{

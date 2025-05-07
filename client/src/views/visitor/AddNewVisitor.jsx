@@ -106,7 +106,7 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
     setErrors({ ...errors, [name]: null });
   };
 
-  console.log('visitorsDta', visitorData);
+  // console.log('visitorsDta', visitorData);
 
   const handleSave = async () => {
     if (!validate()) return;

@@ -5,6 +5,7 @@ import Notification from "../../components/notification/index.jsx";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 import ViewPass from "./ViewPass";
+import axios from "axios";
 
 const Passes = () => {
   const [passesData, setPassesData] = useState([]);
@@ -17,14 +18,30 @@ const Passes = () => {
   
 
   
-  const fetchData = () => {
+  const fetchData = async () => {
     setIsLoading(true);
     try {
       const storedPasses = localStorage.getItem("visitorPasses");
       const parsedPasses = JSON.parse(storedPasses);
+      
+      const token = localStorage.getItem("token");
+
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/pass/visitor_pass/getAllPass`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setPassesData(response.data.data);
+
+
 
       if (Array.isArray(parsedPasses)) {
-        setPassesData(parsedPasses);
+        // setPassesData(parsedPasses);
+        // console.log("allPass", response.data.data , passesData);
       } else {
         setPassesData([]); // Fallback to empty array
         Notification.showErrorMessage(
@@ -149,15 +166,15 @@ const Passes = () => {
                   <td className="px-1 py-1 border-b border-grey-light">
                     <div className="flex justify-center">
                       <div className="inline-block w-16 h-16 overflow-hidden bg-blue-900 border-2 border-gray-300 rounded-full">
-                        {pass.visitor.image ? (
+                        {pass?.visitor?.image ? (
                           <img
-                            src={`data:image/jpeg;base64,${pass.visitor.image}`}
+                            src={`data:image/jpeg;base64,${pass?.visitor?.image}`}
                             alt="User"
                           />
                         ) : (
                           <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
-                            {pass.visitor.first_name
-                              ? pass.visitor.first_name.charAt(0).toUpperCase()
+                            {pass?.visitor?.first_name
+                              ? pass?.visitor?.first_name.charAt(0).toUpperCase()
                               : "N"}
                           </div>
                         )}
@@ -165,19 +182,19 @@ const Passes = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4 border-b border-grey-light">
-                    {pass.visitor.first_name} {pass.visitor.last_name}
+                    {pass?.visitor?.first_name} {pass?.visitor?.last_name}
                   </td>
                   <td className="px-6 py-4 border-b border-grey-light">
-                    {pass.visiting_purpose}
+                    {pass?.visiting_purpose || pass?.visit_purpose}
                   </td>
                   <td className="px-6 py-4 border-b border-grey-light">
-                    {pass.whom_to_visit}
+                    {pass?.whom_to_visit}
                   </td>
                   <td className="px-6 py-4 border-b border-grey-light">
-                    {pass.visiting_department}
+                    {pass?.visiting_department || pass?.visit_department}
                   </td>
                   <td className="px-6 py-4 border-b border-grey-light">
-                    {new Date(pass.created_on).toLocaleString("en-IN", {
+                    {new Date(pass?.created_on).toLocaleString("en-IN", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",
@@ -187,7 +204,7 @@ const Passes = () => {
                     })}
                   </td>
                   <td className="px-6 py-4 border-b border-grey-light">
-                    {new Date(pass.valid_until).toLocaleString("en-IN", {
+                    {new Date(pass?.valid_until).toLocaleString("en-IN", {
                       year: "numeric",
                       month: "2-digit",
                       day: "2-digit",

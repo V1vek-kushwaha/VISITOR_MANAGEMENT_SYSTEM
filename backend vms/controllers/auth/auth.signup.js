@@ -107,12 +107,24 @@ exports.signup = async (req, res) => {
 
 exports.getAllUsers = async (req, res) => {
   try {
-    const users = await User.findAll();
+    const users = await User.findAll({
+      include: [
+        {
+          model: userRole,
+          attributes: ['name'], // Include only the role name
+        },{
+          model: Department,
+          attributes: ['name', 'location'],
+        }
+      ],
+    });
+
     res.status(200).json({ success: true, data: users });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });
   }
 };
+
 
 
 
