@@ -33,7 +33,7 @@ const User = () => {
   const fetchData = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${url}/accounts/get-all-user/`, {
+      const response = await fetch(`http://localhost:5000/api/auth/users`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -42,7 +42,7 @@ const User = () => {
       });
       const json = await response.json();
       if (response.ok) {
-        setUserData(json.results);
+        setUserData(json.data);
       } else {
         Notification.showErrorMessage("Try Again!", json.error);
       }
@@ -58,6 +58,9 @@ const User = () => {
     }
     fetchData();
   }, []);
+
+  console.log('json', userData);
+
 
   return (
     <div style={{marginBottom:"55px"}}>

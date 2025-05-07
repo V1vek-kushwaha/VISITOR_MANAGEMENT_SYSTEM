@@ -85,15 +85,15 @@ const UserProfile = ({ open, onClose, user, onActionClick }) => {
           </div>
           <div className=" p-1 rounded-lg shadow-sm">
             <div className="mb-2 font-bold text-xl">
-              {`${userData.first_name} ${userData.last_name}`}
+              {`${userData.full_name}`}
             </div>
             <div className="divide-y divide-gray-300">
-              <InfoItem icon={<PersonIcon color="primary" />} label="User Type" value={userData.user_type} />
-              <InfoItem icon={<HomeIcon color="secondary" />} label="Address" value={userData.address} />
-              <InfoItem icon={<PhoneIcon color="action" />} label="Phone" value={userData.phone} />
+              <InfoItem icon={<PersonIcon color="primary" />} label="User Type" value={userData.role.name} />
+              <InfoItem icon={<HomeIcon color="secondary" />} label="Address" value={userData.department.location} />
+              <InfoItem icon={<PhoneIcon color="action" />} label="Phone" value={userData.mobile_number} />
               <InfoItem icon={<EmailIcon color="error" />} label="Email" value={userData.email} />
-              <InfoItem icon={<BadgeIcon color="info" />} label="Gov ID" value={userData.employee_code} />
-              <InfoItem icon={<BloodtypeIcon color="warning" />} label="Blood Group" value={userData.blood_group} />
+              <InfoItem icon={<BadgeIcon color="info" />} label="Gov ID" value={userData.department_id} />
+              <InfoItem icon={<BloodtypeIcon color="warning" />} label="Blood Group" value={userData.blood_group || '+B'} />
               <InfoItem icon={<BlockIcon color={userData.blacklisted ? 'error' : 'success'} />} label="Is Active" value={userData.is_active ? "Yes" : "No"} />
               <InfoItem icon={<VpnKeyIcon color="primary" />} label="Is Staff" value={userData.is_staff ? "Yes" : "No"} />
             </div>

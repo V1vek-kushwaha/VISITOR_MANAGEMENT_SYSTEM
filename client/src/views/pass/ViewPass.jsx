@@ -12,7 +12,6 @@ const ViewPass = ({ open, onClose, passData }) => {
     window.print();
   };
 
-  console.log("pass data ifor ", passData);
 
   const qrData = JSON.stringify({
     passId: passData.id,
@@ -84,14 +83,14 @@ const ViewPass = ({ open, onClose, passData }) => {
                   />
                   <InfoItem
                     label="Purpose"
-                    value={passData?.visiting_purpose}
+                    value={passData?.visiting_purpose || passData?.visit_purpose}
                   />
                 </div>
                 <div className="flex-1 flex flex-col space-y-4 p-2">
                   <InfoItem label="To-Visit" value={passData?.whom_to_visit} />
                   <InfoItem
                     label="Department"
-                    value={passData?.visiting_department}
+                    value={passData?.visiting_department || passData?.visit_department}
                   />
                   <InfoItem
                     label="Zones"

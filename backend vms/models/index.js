@@ -23,7 +23,6 @@ db.sequelize = sequelize;
 db.User = require("./user.model")(sequelize, Sequelize);
 db.Visitor = require("./visitor.model")(sequelize, Sequelize);
 
-
 // for role API
 db.Role = require("./role.model")(sequelize, Sequelize);
 // Define association (optional but useful)
@@ -44,7 +43,7 @@ db.VisitorsType = require("./visitors_type.model")(sequelize, Sequelize);
 db.nfc_cards = require("./nfc_cards.model")(sequelize, Sequelize.DataTypes);
 db.Visit = require("./visites.model")(sequelize, Sequelize.DataTypes);
 
-
+db.VisitorPass = require('./visitors_pass.model')(sequelize, Sequelize);
 
 
 
