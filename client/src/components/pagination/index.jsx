@@ -20,7 +20,7 @@ const Pagination = ({ currentPage, totalPages, paginate }) => {
             <button
                 onClick={() => currentPage > 1 && paginate(currentPage - 1)}
                 disabled={currentPage === 1}
-                className={`m-2 p-2 w-10 h-10 flex justify-center items-center rounded-full ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-900 text-white cursor-pointer'}`}
+                className={`m-2 p-2 w-10 h-10 flex justify-center items-center rounded-full ${currentPage === 1 ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[#0096a4] text-white cursor-pointer'}`}
                 aria-label="Previous Page"
             >
                 &laquo;
@@ -29,7 +29,7 @@ const Pagination = ({ currentPage, totalPages, paginate }) => {
                 <button
                     key={number}
                     onClick={() => paginate(number)}
-                    className={`m-1 p-2 w-8 h-8 flex items-center justify-center rounded-full font-medium ${currentPage === number ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-800'}`}
+                    className={`m-1 p-2 w-8 h-8 flex items-center justify-center rounded-full font-medium ${currentPage === number ? 'bg-[#0096a4] text-white' : 'bg-gray-200 text-gray-800'}`}
                     aria-label={`Page ${number}`}
                 >
                     {number}
@@ -38,7 +38,7 @@ const Pagination = ({ currentPage, totalPages, paginate }) => {
             <button
                 onClick={() => currentPage < totalPages && paginate(currentPage + 1)}
                 disabled={currentPage === totalPages}
-                className={`m-2 p-2 w-10 h-10 flex justify-center items-center rounded-full ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-blue-900 text-white cursor-pointer'}`}
+                className={`m-2 p-2 w-10 h-10 flex justify-center items-center rounded-full ${currentPage === totalPages ? 'bg-gray-200 text-gray-500 cursor-not-allowed' : 'bg-[#0096a4] text-white cursor-pointer'}`}
                 aria-label="Next Page"
             >
                 &raquo;

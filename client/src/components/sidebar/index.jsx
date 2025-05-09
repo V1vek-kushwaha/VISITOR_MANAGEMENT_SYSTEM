@@ -94,7 +94,7 @@ const SideBar = () => {
 
         <div className="absolute left-0 flex justify-center w-full bottom-4">
           {!isCollapsed && (
-            <p className="text-[11px] text-gray-400 font-medium tracking-wide">
+            <p className="text-[11px] text-slate-800 font-medium tracking-wide">
               © 2025 Visitor Management
             </p>
           )}

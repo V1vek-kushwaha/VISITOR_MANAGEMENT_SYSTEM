@@ -13,7 +13,8 @@ export const getAPI = async (url) => {
 
 
 export const postAPI = async (url, body) => {
-  const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNzQ0ODczMjQ1LCJleHAiOjE3NDQ5NTk2NDV9.0jf0oUptOmUspDdHrBDVzj5iv79WhxrE4wcqbqe6ujk"
+  // const token ="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwicm9sZSI6ImVtcGxveWVlIiwiaWF0IjoxNzQ0ODczMjQ1LCJleHAiOjE3NDQ5NTk2NDV9.0jf0oUptOmUspDdHrBDVzj5iv79WhxrE4wcqbqe6ujk"
+  const token = localStorage.getItem('token');
   try {
     const res = await fetch(url, {
       method: "POST",

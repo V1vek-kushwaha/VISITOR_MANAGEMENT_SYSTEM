@@ -165,14 +165,14 @@ const Passes = () => {
                 >
                   <td className="px-1 py-1 border-b border-grey-light">
                     <div className="flex justify-center">
-                      <div className="inline-block w-16 h-16 overflow-hidden bg-blue-900 border-2 border-gray-300 rounded-full">
+                      <div className="inline-block w-16 h-16 overflow-hidden bg-[#0096a4] border-2 border-gray-300 rounded-full">
                         {pass?.visitor?.image ? (
                           <img
                             src={`data:image/jpeg;base64,${pass?.visitor?.image}`}
                             alt="User"
                           />
                         ) : (
-                          <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
+                          <div className="flex items-center justify-center w-full h-full text-white bg-[#0096a4]">
                             {pass?.visitor?.first_name
                               ? pass?.visitor?.first_name.charAt(0).toUpperCase()
                               : "N"}

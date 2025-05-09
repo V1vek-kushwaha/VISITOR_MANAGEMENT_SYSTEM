@@ -16,7 +16,7 @@ const Faq = () => {
         {questions.map((question, index) => (
           <div key={index} className="pt-4">
             <button
-              className="flex justify-between items-center w-full text-left text-lg text-blue-800 font-semibold bg-gradient-to-r from-white/30 via-white/20 to-[#a1c4fd]/40 p-4 rounded-lg focus:outline-none focus-visible:ring"
+              className="flex justify-between items-center w-full text-left text-lg text-slate-800 font-semibold bg-gradient-to-r from-white/30 via-white/20 to-[#a1c4fd]/40 p-4 rounded-lg focus:outline-none focus-visible:ring"
               onClick={() => toggleQuestion(index)}
             >
               {question.title}

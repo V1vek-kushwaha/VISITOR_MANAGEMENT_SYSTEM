@@ -33,7 +33,7 @@ const Index = () => {
     <div className="p-4 md:p-8 lg:p-10 mb-14 bg-gray-50 min-h-screen">
       <div className="flex justify-between items-center mb-2">
         <h3 className="text-xl font-semibold text-gray-800">Employee Details</h3>
-        <button className="flex items-center px-5 py-2 text-white bg-blue-900 rounded-full shadow-md  transition duration-300 ease-in-out">
+        <button className="flex items-center px-5 py-2 text-white bg-[#0096a4] rounded-full shadow-md  transition duration-300 ease-in-out">
           <AddIcon className="w-5 mr-2 h-7" />
           ADD NEW
         </button>

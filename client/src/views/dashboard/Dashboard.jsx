@@ -363,7 +363,7 @@ const Dashboard = () => {
                                 alt="User"
                               />
                             ) : (
-                              <div className="h-full w-full flex items-center justify-center text-white bg-blue-900">
+                              <div className="h-full w-full flex items-center justify-center text-white bg-[#0096a4]">
                                 {visitor.visitor_name
                                   ? visitor.visitor_name.charAt(0).toUpperCase()
                                   : "N"}

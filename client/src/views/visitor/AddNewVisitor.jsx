@@ -5,6 +5,8 @@ import { url } from "../../utils/Constants";
 import CameraModal from "../../components/camera";
 import SignatureCapture from "../../components/SignatureCapture/SignatureCapture";
 import { postAPI } from "../../utils/api";
+import axios from "axios";
+import { dataURLtoBlob, getDummyImage, getDummySignature } from "../../components/commonforall/CommonForAll";
 
 const steps = [
   "Personal Details",
@@ -40,14 +42,14 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
     const newErrors = {};
     switch (activeStep) {
       case 0:
-        if (!visitorData.first_name.trim())
+        if (!visitorData.first_name?.trim())
           newErrors.first_name = "First name is required";
-        if (!visitorData.last_name.trim())
+        if (!visitorData.last_name?.trim())
           newErrors.last_name = "Last name is required";
-        if (!visitorData.phone || !visitorData.phone.trim()) {
+        if (!visitorData.phone || !visitorData.phone?.trim()) {
           newErrors.phone = "Phone number is required";
         } else {
-          const cleanPhone = visitorData.phone.trim().replace(/\D/g, "");
+          const cleanPhone = visitorData.phone?.trim().replace(/\D/g, "");
           if (cleanPhone.length !== 10) {
             newErrors.phone = "Phone number should be 10 digits";
           } else if (!/^\d{10}$/.test(cleanPhone)) {
@@ -56,9 +58,9 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
         }
         break;
       case 1:
-        if (!visitorData.address.trim())
+        if (!visitorData.address?.trim())
           newErrors.address = "Address is required";
-        if (visitorData.email.trim()) {
+        if (visitorData.email?.trim()) {
           if (
             !/^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[a-zA-Z]{2,}$/.test(
               visitorData.email
@@ -70,11 +72,11 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
 
         break;
       case 2:
-        if (!visitorData.visitor_type.trim())
+        if (!visitorData.visitor_type?.trim())
           newErrors.visitor_type = "Visitor type is required";
-        if (!visitorData.gov_id_type.trim())
+        if (!visitorData.gov_id_type?.trim())
           newErrors.gov_id_type = "Government ID type is required";
-        if (!visitorData.gov_id_no.trim())
+        if (!visitorData.gov_id_no?.trim())
           newErrors.gov_id_no = "Government ID number is required";
         break;
       default: 
@@ -106,68 +108,93 @@ const AddNewVisitor = ({ open, onClose, fetchData, onActionClick }) => {
     setErrors({ ...errors, [name]: null });
   };
 
-  // console.log('visitorsDta', visitorData);
+  console.log('visitorsDta', imageData);
+
 
   const handleSave = async () => {
     if (!validate()) return;
-    // const data = {
-    //   "full_name": "muku Doe",
-    //   "mobile_number": "0501234567",
-    //   "email": "muku@example.com",
-    //   "emirates_id_number": "784-1234-5678900-1",
-    //   "emirates_id_expiry": "2026-12-31",
-    //   "nationality": "American",
-    //   "photo_url": "http://example.com/photo.jpg",
-    //   "id_document_url": "http://example.com/id.jpg",
-    //   "blacklist_reason": "",
-    //   "is_blacklisted": false,
-    //   "emergency_contact_name": "Jane Doe",
-    //   "emergency_contact_number": "0509876543",
-    //   "visitor_type": "Contractor",
-    //   "government_id_type": "Passport",
-    //   "government_id_number": "A1234567"
-    // }
-    
+  
     try {
-      // Include captured data
-      visitorData.image = imageData;
-      visitorData.signature = signatureData;
+      // Assign dummy image/signature if not present
+      const dummyImage = getDummyImage();
+      const dummySignature = getDummySignature();
   
-      // Build request payload with defaults where needed
-      const data = {
-        
-        full_name: `${visitorData.first_name || "First"} ${visitorData.last_name || "Last"}`,
-        mobile_number: visitorData.phone || "0000000000",
-        email: visitorData.email || "",
-        emirates_id_number: visitorData.gov_id_no || "",
-        emirates_id_expiry: "2026-12-31", // static for now, update as needed
-        nationality: "Indian", // or fetch from a select
-        photo_url: visitorData.image ? `data:image/jpeg;base64,${visitorData.image}` : "",
-        id_document_url: "", // You can map a document field if added later
-        blacklist_reason: "",
-        is_blacklisted: false,
-        emergency_contact_name: "N/A", // default or editable field
-        emergency_contact_number: "N/A", // default or editable field
-        visitor_type: visitorData.visitor_type || "General",
-        government_id_type: visitorData.gov_id_type || "Other",
-        government_id_number: visitorData.gov_id_no || "",
-        signature: visitorData.signature ? `data:image/png;base64,${visitorData.signature}` : "",
-      };
+      if (!visitorData.image.startsWith("data:image/")) {
+        visitorData.image = `data:image/jpeg;base64,${visitorData.image}` || dummyImage;
+      }
+      if(!visitorData.signature.startsWith("data:image/")) {
+        visitorData.signature =`data:image/jpeg;base64,${visitorData.signature}` || dummySignature;
+      }
+      
   
-      const json = await postAPI(`http://localhost:5000/api/visitor/visitors-create`, data);
+      const formData = new FormData();
   
-      if (json) {
+      formData.append('full_name', `${visitorData.first_name || "First"} ${visitorData.last_name || "Last"}`);
+      formData.append('mobile_number', visitorData.phone || "0000000000");
+      formData.append('email', visitorData.email || "");
+      formData.append('address', visitorData.address || "");
+      formData.append('visitor_type', visitorData.visitor_type || "");
+      formData.append('government_id_type', visitorData.gov_id_type || "");
+      formData.append('government_id_number', visitorData.gov_id_no || "");
+  
+      // Convert profile image
+      try {
+        const imageBlob = dataURLtoBlob(visitorData.image);
+        formData.append('profile_image', imageBlob, 'profile.png');
+      } catch (e) {
+        console.error("Image conversion error:", e);
+        Notification.showErrorMessage("Invalid image format.");
+        return;
+      }
+  
+      // Convert signature image
+      try {
+        const signatureBlob = dataURLtoBlob(visitorData.signature);
+        formData.append('signature_image', signatureBlob, 'signature.png');
+      } catch (e) {
+        console.error("Signature conversion error:", e);
+        Notification.showErrorMessage("Invalid signature format.");
+        return;
+      }
+  
+      // Get token
+      const token = localStorage.getItem("token");
+      if (!token) {
+        Notification.showErrorMessage("Authentication token not found.");
+        return;
+      }
+  
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/visitor/visitors-create`,
+        formData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      console.log('res', response);
+  
+      if (response.status===201) {
         Notification.showSuccessMessage("Success", "Visitor Added Successfully");
-        onActionClick("view", json);
+        onActionClick("view", response.data.visitor);
         handleClose();
         fetchData();
       } else {
-        Notification.showErrorMessage("Error", json.error);
+        Notification.showErrorMessage("Error", response.data?.error || "Unknown error");
       }
     } catch (error) {
-      Notification.showErrorMessage("Error", "Server error");
+      console.error("Error:", error);
+      Notification.showErrorMessage("Error", error.response?.data?.error || "Server error");
     }
   };
+  
+  // Safe base64 -> Blob
+  
+  
+   
 
   const handleImageCapture = (base64Image) => {
     setImageData(base64Image);

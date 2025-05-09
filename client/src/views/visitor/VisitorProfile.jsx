@@ -83,19 +83,19 @@ const VisitorProfile = ({ open, onClose, visitor, onActionClick }) => {
           </div>
           <div className=" p-1 rounded-lg shadow-sm">
             <div className="mb-2 font-bold text-xl">
-              {`${visitor.first_name} ${visitor.last_name}`}
+              {`${visitor.full_name}`}
             </div>
             <div className="divide-y divide-gray-300">
               <InfoItem icon={<PersonIcon color="primary" />} label="Visitor Type" value={visitor.visitor_type} />
               <InfoItem icon={<HomeIcon color="secondary" />} label="Address" value={visitor.address} />
-              <InfoItem icon={<PhoneIcon color="action" />} label="Phone" value={visitor.phone} />
+              <InfoItem icon={<PhoneIcon color="action" />} label="Phone" value={visitor.mobile_number} />
               <InfoItem icon={<EmailIcon color="error" />} label="Email" value={visitor.email} />
-              <InfoItem icon={<BadgeIcon color="info" />} label="Gov ID Type" value={visitor.gov_id_type
+              <InfoItem icon={<BadgeIcon color="info" />} label="Gov ID Type" value={visitor.government_id_type
                 // .replace('_', ' ')
               } 
                 />
-              <InfoItem icon={<VpnKeyIcon color="primary" />} label="Gov ID No" value={visitor.gov_id_no} />
-              <InfoItem icon={<BloodtypeIcon color="warning" />} label="Blood Group" value={visitor.blood_group} />
+              <InfoItem icon={<VpnKeyIcon color="primary" />} label="Gov ID No" value={visitor.government_id_number} />
+              <InfoItem icon={<BloodtypeIcon color="warning" />} label="Blood Group" value={visitor.blood_group || 'A+'} />
               {/* <InfoItem icon={<BlockIcon color={visitor.is_blacklisted ? 'error' : 'success'} />} label="Blacklisted" value={visitor.is_blacklisted ? "Yes" : "No"} /> */}
             </div>
           </div>

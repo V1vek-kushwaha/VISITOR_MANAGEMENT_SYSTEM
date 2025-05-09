@@ -14,17 +14,17 @@ import MultipleSelectDropdown from "./MultipleSelectDropdown";
 import axios from "axios";
 
 function splitFullName(fullName) {
-  const parts = fullName.trim().split(" ");
+  const parts = fullName?.trim()?.split(" ");
 
   const firstName = parts[0] || "";
-  const lastName = parts.slice(1).join(" ") || "";
+  const lastName = parts?.slice(1)?.join(" ") || "";
 
   return { firstName, lastName };
 }
 
 
 const CreateNewPass = ({ open, onClose, visitor }) => {
-  const { firstName, lastName } = splitFullName(visitor.full_name);
+  const { firstName, lastName } = splitFullName(visitor.full_name || "visitors New");
 
   const initialValues = {
     visitor: visitor.id || "",
@@ -205,8 +205,6 @@ const CreateNewPass = ({ open, onClose, visitor }) => {
     }
   };
  
-
-
   const handleSubmit = async () => {
     if (!validate()) return;
 
