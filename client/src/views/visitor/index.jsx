@@ -144,7 +144,11 @@ const Visitor = () => {
           />
           <UpdateVisitor
             open={updateModalOpen}
-            onClose={() => setUpdateModalOpen(false)}
+            onClose={() => {
+              setUpdateModalOpen(false)
+              setIsLoading(true)
+            }
+            }
             visitor={selectedVisitor}
             fetchData={fetchData}
           />

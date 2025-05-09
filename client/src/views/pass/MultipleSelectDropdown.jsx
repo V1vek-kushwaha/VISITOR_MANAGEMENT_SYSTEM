@@ -82,10 +82,10 @@ const MultipleSelectDropdown = ({ options, selectedOptions, onChange }) => {
                     const zone = options.find(option => option.id === id);
                     return (
                         <div key={id} className="flex items-center space-x-1 bg-blue-100 px-2 py-1 rounded-full">
-                            <span className="text-blue-800">{zone.name}</span>
+                            <span className="text-[#0097a5]">{zone.name}</span>
                             <button
                                 onClick={() => removeChip(id)}
-                                className="text-blue-800"
+                                className="text-[#0097a5]"
                             >
                                 &times;
                             </button>

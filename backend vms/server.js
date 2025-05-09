@@ -7,6 +7,12 @@ const db = require("./models"); // ✅ use 'db' not 'sequelize'
 const dotenv = require("dotenv");
 const morgan = require("morgan")
 dotenv.config();
+// In app.js or server.js
+const path = require("path");
+
+
+// Serve uploaded images as static files
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 const port = process.env.port || 5000;
 

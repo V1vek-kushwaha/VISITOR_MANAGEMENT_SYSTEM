@@ -65,7 +65,7 @@ const Topbar = () => {
 "
       >
         {/* <img src={essilogo} alt="MOD Logo" className="h-12" />  */}
-        <div class="h-full flex items-center text-blue-900 font-bold text-xl">
+        <div class="h-full flex items-center text-black font-bold text-xl">
           VISITOR MANAGEMENT SYSTEM
         </div>
 
@@ -77,7 +77,7 @@ const Topbar = () => {
               className="flex items-center space-x-2 cursor-pointer"
               onClick={() => setProfileModalOpen(true)}
             >
-              <div className="w-10 h-10 rounded-lg overflow-hidden bg-blue-900 flex justify-center items-center">
+              <div className="w-10 h-10 rounded-lg overflow-hidden bg-[#0096a4] flex justify-center items-center">
                 {userimage !== "null" ? (
                   <img
                     src="https://images.pexels.com/photos/2379005/pexels-photo-2379005.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
@@ -97,7 +97,7 @@ const Topbar = () => {
             </div>
 
           <button
-              className="bg-blue-900 hover:blue-900 text-white py-2 px-4 rounded-3xl shadow-md flex items-center text-sm"
+              className="bg-[#0096a4] hover:blue-900 text-white py-2 px-4 rounded-3xl shadow-md flex items-center text-sm"
               onClick={() => handleLogout()}
             >
               Logout

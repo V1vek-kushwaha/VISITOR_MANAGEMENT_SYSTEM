@@ -184,7 +184,7 @@ const Visitors = ({
         </div>
         <div className="flex space-x-3">
           <button
-            className="flex items-center px-4 py-1 text-white bg-blue-900  rounded-3xl"
+            className="flex items-center px-4 py-1 text-white bg-[#0096a4]  rounded-3xl"
             onClick={() => {
               onActionClick("addNewVisitor");
               handleClose();
@@ -227,7 +227,7 @@ const Visitors = ({
                 <tr key={visitors.id} className="hover:bg-gray-50">
                   <td className="px-2 py-2 border-b">
                     <div className="flex justify-center">
-                      <div className="inline-block w-16 h-16 overflow-hidden border-2 border-gray-300 rounded-full bg-blue-900">
+                      <div className="inline-block w-16 h-16 overflow-hidden border-2 border-gray-300 rounded-full bg-[#0096a4]">
                         {visitors.image ? (
                           <img
                             src={`data:image/jpeg;base64,${visitors.photo_url}`}
@@ -236,7 +236,7 @@ const Visitors = ({
                           />
 
                         ) : (
-                          <div className="flex items-center justify-center w-full h-full text-white bg-blue-900">
+                          <div className="flex items-center justify-center w-full h-full text-white bg-[#0096a4]">
                             {visitors.first_name ? visitors.first_name.charAt(0).toUpperCase() : "N"}
                           </div>
                         )}

@@ -1038,14 +1038,14 @@ const Report = () => {
 
         <div className="flex justify-between items-center m-6">
           <button
-            className="bg-blue-900  text-white rounded-3xl shadow-md flex items-center py-2 px-6"
+            className="bg-[#0096a4]  text-white rounded-3xl shadow-md flex items-center py-2 px-6"
             onClick={handleView}
           >
             View Report
           </button>
           {downloadAvailable && (
             <button
-              className="bg-blue-900  text-white rounded-3xl shadow-md flex items-center py-2 px-6 ml-2"
+              className="bg-[#0096a4]  text-white rounded-3xl shadow-md flex items-center py-2 px-6 ml-2"
               onClick={handleDownload}
             >
               Download

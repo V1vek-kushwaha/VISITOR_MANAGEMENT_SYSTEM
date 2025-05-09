@@ -3,6 +3,9 @@ import { Dialog, DialogTitle } from "@mui/material";
 import Notification from "../../components/notification";
 import { url } from "../../utils/Constants";
 import CameraModal from "../../components/camera";
+import SplitFullName from "../../components/commonforall/SplitFullName";
+import { dataURLtoBlob, getDummyImage, getDummySignature } from "../../components/commonforall/CommonForAll";
+import axios from "axios";
 
 const steps = [
   "Personal Details",
@@ -12,18 +15,19 @@ const steps = [
 ];
 
 const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
+  const { firstName, lastName } = SplitFullName(visitor.full_name || "visitors New");
+
   const initialValues = {
-    first_name: "",
-    last_name: "",
+    first_name: firstName || "",
+    last_name: lastName || "",
     visitor_type: "",
     address: "",
     email: "",
-    blood_group: "",
-    phone: "",
-    image: "",
-    signature: "",
-    gov_id_no: "",
-    gov_id_type: "",
+    mobile_number: "",
+    profile_image: "",
+    signature_image: "",
+    government_id_number: "",
+    government_id_type: "",
   };
 
   const [activeStep, setActiveStep] = useState(0);
@@ -33,38 +37,43 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
   const [signatureModalOpen, setSignatureModalOpen] = useState(false);
   const [imageData, setImageData] = useState("");
   const [signatureData, setSignatureData] = useState("");
+  const [fullnames, setFullNameS] = useState({})
 
   useEffect(() => {
     setVisitorData(visitor);
     setImageData(visitor.image);
     setSignatureData(visitor.signature);
+    setFullNameS({
+      first_name: firstName,
+      last_name: lastName,
+    })
   }, [open]);
 
   const validate = () => {
     const newErrors = {};
     switch (activeStep) {
       case 0:
-        if (!visitorData.first_name.trim())
+        if (!fullnames.first_name?.trim())
           newErrors.first_name = "First name is required";
-        if (!visitorData.last_name.trim())
+        if (!fullnames.last_name?.trim())
           newErrors.last_name = "Last name is required";
-        if (!visitorData.address.trim())
+        if (!visitorData.address?.trim())
           newErrors.address = "Address is required";
         break;
       case 1:
-        if (!visitorData.visitor_type.trim())
+        if (!visitorData.visitor_type?.trim())
           newErrors.visitor_type = "Visitor type is required";
-        if (!visitorData.phone || !visitorData.phone.trim()) {
+        if (!visitorData.mobile_number || !visitorData.mobile_number?.trim()) {
           newErrors.phone = "Phone number is required";
         } else {
-          const cleanPhone = visitorData.phone.trim().replace(/\D/g, "");
+          const cleanPhone = visitorData.mobile_number?.trim().replace(/\D/g, "");
           if (cleanPhone.length !== 10) {
             newErrors.phone = "Phone number should be 10 digits";
           } else if (!/^\d{10}$/.test(cleanPhone)) {
             newErrors.phone = "Phone number should be numeric";
           }
         }
-        if (visitorData.email.trim()) {
+        if (visitorData.email?.trim()) {
           if (
             !/^[\w!#$%&'*+/=?^`{|}~-]+(?:\.[\w!#$%&'*+/=?^`{|}~-]+)*@(?:[\w](?:[\w-]*[\w])?\.)+[a-zA-Z]{2,}$/.test(
               visitorData.email
@@ -75,11 +84,13 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
         }
         break;
       case 2:
-        if (!visitorData.gov_id_no.trim())
+        if (!visitorData.government_id_number?.trim())
           newErrors.gov_id_no = "Government ID number is required";
-        if (!visitorData.gov_id_type.trim())
+        if (!visitorData.government_id_type?.trim())
           newErrors.gov_id_type = "Government ID type is required";
         break;
+      default:
+        console.log('default case');
     }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -103,63 +114,98 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setVisitorData({ ...visitorData, [name]: value });
-    setErrors({ ...errors, [name]: null });
+
+    setVisitorData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: null,
+    }));
   };
+
+  const handleInputChangesplit = (e) => {
+    const { name, value } = e.target;
+    setFullNameS({
+      ...fullnames,
+      [name]: value
+    })
+  }
+  console.log('vis', visitorData);
 
   const handleSave = async () => {
     if (!validate()) return;
-  
-    const fieldsToSend = [
-      "first_name",
-      "last_name",
-      "visitor_type",
-      "address",
-      "email",
-      "blood_group",
-      "phone",
-      "image",
-      "signature",
-      "gov_id_no",
-      "gov_id_type",
-    ];
-  
-    const payload = Object.keys(visitorData)
-      .filter((key) => fieldsToSend.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = visitorData[key];
-        return obj;
-      }, {});
-  
+
     try {
-      payload.image = imageData;
-      payload.signature = signatureData;
-  
-      const response = await fetch(
+      const dummyImage = getDummyImage();
+      const dummySignature = getDummySignature();
+
+      visitorData.image = visitorData.image || dummyImage;
+      visitorData.signature = visitorData.signature || dummySignature;
+
+      const formData = new FormData();
+
+      formData.append('full_name', `${fullnames.first_name || "First"} ${fullnames.last_name || "Last"}`);
+      formData.append('mobile_number', visitorData.mobile_number || "0000000000");
+      formData.append('email', visitorData.email || "");
+      formData.append('address', visitorData.address || "");
+      formData.append('visitor_type', visitorData.visitor_type || "");
+      formData.append('government_id_type', visitorData.government_id_type || "");
+      formData.append('government_id_number', visitorData.government_id_number || "");
+
+      // Convert profile image
+      try {
+        const imageBlob = dataURLtoBlob(visitorData.image);
+        formData.append('profile_image', imageBlob, 'profile.png');
+      } catch (e) {
+        console.error("Image conversion error:", e);
+        Notification.showErrorMessage("Invalid image format.");
+        return;
+      }
+
+      // Convert signature image
+      try {
+        const signatureBlob = dataURLtoBlob(visitorData.signature);
+        formData.append('signature_image', signatureBlob, 'signature.png');
+      } catch (e) {
+        console.error("Signature conversion error:", e);
+        Notification.showErrorMessage("Invalid signature format.");
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        Notification.showErrorMessage("Authentication token not found.");
+        return;
+      }
+
+      const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/visitor/visitors-update/${visitorData.id}`,
+        formData,
         {
-          method: "PATCH",
           headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify(payload),
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
         }
       );
-  
-      if (response.ok) {
+
+      if (response.status === 200) {
         Notification.showSuccessMessage("Success", "Visitor Updated Successfully");
         handleClose();
         fetchData();
       } else {
-        const json = await response.json();
-        Notification.showErrorMessage("Error", json.error);
+        Notification.showErrorMessage("Error", response.data?.error || "Unknown error");
       }
     } catch (error) {
-      Notification.showErrorMessage("Error", "Server error");
+      console.error("Update Error:", error);
+      Notification.showErrorMessage("Error", error.response?.data?.error || "Server error");
     }
   };
-  
+
+
 
   const handleImageCapture = (base64Image) => {
     setImageData(base64Image);
@@ -192,14 +238,13 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               First Name
             </label>
             <input
-              className={`border-2 p-3 rounded-lg ${
-                errors.first_name ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.first_name ? "border-red-500" : "border-gray-300"
+                }`}
               id="first_name"
               name="first_name"
               placeholder="First Name"
-              value={visitorData.first_name}
-              onChange={handleInputChange}
+              value={fullnames.first_name}
+              onChange={handleInputChangesplit}
             />
             {errors.first_name && (
               <div className="text-red-500 text-xs">{errors.first_name}</div>
@@ -212,14 +257,13 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               Last Name
             </label>
             <input
-              className={`border-2 p-3 rounded-lg ${
-                errors.last_name ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.last_name ? "border-red-500" : "border-gray-300"
+                }`}
               id="last_name"
               name="last_name"
               placeholder="Last Name"
-              value={visitorData.last_name}
-              onChange={handleInputChange}
+              value={fullnames.last_name}
+              onChange={handleInputChangesplit}
             />
             {errors.last_name && (
               <div className="text-red-500 text-xs">{errors.last_name}</div>
@@ -232,9 +276,8 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               Address
             </label>
             <input
-              className={`border-2 p-3 rounded-lg ${
-                errors.address ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.address ? "border-red-500" : "border-gray-300"
+                }`}
               id="address"
               name="address"
               placeholder="Address"
@@ -256,9 +299,8 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               Visitor Type
             </label>
             <select
-              className={`border-2 p-3 rounded-lg ${
-                errors.visitor_type ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.visitor_type ? "border-red-500" : "border-gray-300"
+                }`}
               id="visitor_type"
               name="visitor_type"
               value={visitorData.visitor_type}
@@ -281,13 +323,12 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               Phone
             </label>
             <input
-              className={`border-2 p-3 rounded-lg ${
-                errors.phone ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.phone ? "border-red-500" : "border-gray-300"
+                }`}
               id="phone"
-              name="phone"
+              name="mobile_number"
               placeholder="Phone"
-              value={visitorData.phone}
+              value={visitorData.mobile_number}
               onChange={handleInputChange}
             />
             {errors.phone && (
@@ -302,9 +343,8 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
             </label>
             <input
               type="email"
-              className={`border-2 p-3 rounded-lg ${
-                errors.email ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.email ? "border-red-500" : "border-gray-300"
+                }`}
               id="email"
               name="email"
               placeholder="Email"
@@ -326,12 +366,11 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               Government ID Type
             </label>
             <select
-              className={`border-2 p-3 rounded-lg ${
-                errors.gov_id_type ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.gov_id_type ? "border-red-500" : "border-gray-300"
+                }`}
               id="gov_id_type"
-              name="gov_id_type"
-              value={visitorData.gov_id_type}
+              name="government_id_type"
+              value={visitorData.government_id_type}
               onChange={handleInputChange}
             >
               <option value="">Select ID Type</option>
@@ -350,13 +389,12 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
               Government ID Number
             </label>
             <input
-              className={`border-2 p-3 rounded-lg ${
-                errors.gov_id_no ? "border-red-500" : "border-gray-300"
-              }`}
+              className={`border-2 p-3 rounded-lg ${errors.gov_id_no ? "border-red-500" : "border-gray-300"
+                }`}
               id="gov_id_no"
-              name="gov_id_no"
+              name="government_id_number"
               placeholder="Government ID Number"
-              value={visitorData.gov_id_no}
+              value={visitorData.government_id_number}
               onChange={handleInputChange}
             />
             {errors.gov_id_no && (
@@ -423,7 +461,7 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
                 )}
               </div>
               <button
-                className="flex items-center bg-blue-900  text-white py-1 px-4 rounded-3xl"
+                className="flex items-center bg-[#0096a4]  text-white py-1 px-4 rounded-3xl"
                 onClick={() => setSignatureModalOpen(true)}
               >
                 Capture Signature
@@ -460,9 +498,8 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
           {steps.map((label, index) => (
             <div
               key={label}
-              className={`flex-1 ${
-                index <= activeStep ? "bg-green-500" : "bg-gray-200"
-              } h-2 mx-2 rounded-full transition duration-500 ease-in-out`}
+              className={`flex-1 ${index <= activeStep ? "bg-green-500" : "bg-gray-200"
+                } h-2 mx-2 rounded-full transition duration-500 ease-in-out`}
             ></div>
           ))}
         </div>
@@ -470,9 +507,8 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
           {stepContent(activeStep)}
           <div className="flex justify-between mt-8">
             <button
-              className={`py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${
-                activeStep === 0 ? "bg-gray-300" : "bg-red-500 hover:bg-red-700"
-              }`}
+              className={`py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white ${activeStep === 0 ? "bg-gray-300" : "bg-red-500 hover:bg-red-700"
+                }`}
               disabled={activeStep === 0}
               onClick={handleBack}
             >
@@ -481,7 +517,7 @@ const UpdateVisitor = ({ open, onClose, visitor, fetchData }) => {
             {activeStep === steps.length - 1 ? (
               <button
                 className="py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-500 hover:bg-blue-700"
-                // onClick={handleSave}
+                onClick={handleSave}
               >
                 Save
               </button>

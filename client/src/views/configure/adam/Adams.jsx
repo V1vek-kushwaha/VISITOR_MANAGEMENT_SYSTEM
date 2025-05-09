@@ -141,7 +141,7 @@ const Adams = () => {
                         ))}
                     </select>
                 </div>
-                <button className="flex items-center bg-blue-900  text-white py-1 px-4 rounded-3xl" onClick={() => onActionClick('addNewAdam')}>
+                <button className="flex items-center bg-[#0096a4]  text-white py-1 px-4 rounded-3xl" onClick={() => onActionClick('addNewAdam')}>
                     <AddIcon className="h-4 w-5 mr-2" />
                     ADD NEW
                 </button>
